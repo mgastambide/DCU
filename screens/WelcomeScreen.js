@@ -135,7 +135,7 @@ export default class WelcomeScreen extends React.Component {
 
                                 <View style={{opacity: (this.state.position === 'center') ? 1 : 0}}>
                                     <Text style={styles.title}>Bienvenido a</Text>
-                                    <Text style={styles.subtitle}>Afasia DCU</Text>
+                                    <Text style={styles.subtitle}>Afasia Anómica DCU</Text>
                                 </View>
 
                                 <View style={{
@@ -159,7 +159,7 @@ export default class WelcomeScreen extends React.Component {
                                     <View>
                                         <Buttons title={'Iniciar Sesión'} callback={() => this.props.navigation.navigate('Login', {from_welcome: true})} background={Colors.APHASIA_GREY3} border={Colors.APHASIA_GREY_LIGHT} title_color={Colors.APHASIA_WHITE} />
                                         <Buttons title={'Crear cuenta'} callback={() => this.props.navigation.navigate('Register', {from_welcome: true})} background={Colors.APHASIA_GREY_LIGHT} border={Colors.APHASIA_GREY3} title_color={Colors.APHASIA_GREY3} />
-                                        <Buttons title={'¿Qué es Afasia DCU ?'} callback={() => this.setState({visible: !this.state.visible})} background={Colors.APHASIA_WHITE} border={Colors.APHASIA_GREY3} title_color={Colors.APHASIA_GREY3} />
+                                        <Buttons title={'¿Qué es Afasia Anómica DCU ?'} callback={() => this.setState({visible: !this.state.visible})} background={Colors.APHASIA_WHITE} border={Colors.APHASIA_GREY3} title_color={Colors.APHASIA_GREY3} />
                                     </View>
                                 </View>
 

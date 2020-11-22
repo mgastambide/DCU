@@ -41,14 +41,6 @@ export default class ListeningScreen extends React.Component {
                 color: Colors.APHASIA_BLUE,
                 nav: 'Listening'
             },
-            {
-                id: '3',
-                title: 'Escuchar y escribir la palabra',
-                icon: require('../../assets/images/Icons/boy_spelling_one.png'),
-                iconActive: require('../../assets/images/Icons/boy_spelling_two.png'),
-                color: Colors.APHASIA_RED,
-                nav: 'Listening'
-            },
         ]
     }
 
@@ -75,7 +67,7 @@ export default class ListeningScreen extends React.Component {
                                 ListHeaderComponent={this._headerComponent}
                                 data={this.state.categories}
                                 renderItem={({item}) => <Category category={item}
-                                                                  redirect={(nav) => this.props.navigation.navigate('ListeningExercise')}
+                                                                  redirect={(nav) => this.props.navigation.navigate('ListeningExercise', {idExercise: item.id})}
                                 />}
                                 keyExtractor={item => item.id}
                                 numColumns={2}

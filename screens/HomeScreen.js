@@ -19,27 +19,31 @@ export default class HomeScreen extends React.Component {
         categories:[
             {
                 id: '0',
-                title: 'Escuchando',
-                icon: require('../assets/images/Icons/boy_listening_one.png'),
-                iconActive: require('../assets/images/Icons/boy_listening_two.png'),
+                title: 'Escuchar',
+                icon: require('../assets/images/Icons/person_listening.png'),
                 color: Colors.APHASIA_ORANGE,
                 nav: 'Listening'
             },
             {
                 id: '1',
-                title: ' Leyendo ',
-                icon: require('../assets/images/Icons/girl_reading_one.png'),
-                iconActive: require('../assets/images/Icons/girl_reading_two.png'),
+                title: '¿Quién es quién?',
+                icon: require('../assets/images/Icons/persons_who_is_who.png'),
                 color: Colors.APHASIA_YELLOW,
-                nav: 'Listening'
+                nav: 'WhoIsWhoExercise'
             },
             {
                 id: '2',
-                title: 'Deletreando',
-                icon: require('../assets/images/Icons/boy_spelling_one.png'),
-                iconActive: require('../assets/images/Icons/boy_spelling_two.png'),
+                title: 'Selccionar',
+                icon: require('../assets/images/Icons/person_group.png'),
                 color: Colors.APHASIA_BLUE,
-                nav: 'Listening'
+                nav: 'ToSelectExercise'
+            },
+            {
+                id: '3',
+                title: 'Sobra',
+                icon: require('../assets/images/Icons/person_surplus.png'),
+                color: Colors.APHASIA_BLUE,
+                nav: 'SurplusExercise'
             },
         ]
     }
@@ -51,7 +55,7 @@ export default class HomeScreen extends React.Component {
         )
     }
 
-    _headerComponent = () => <Text style={styles.title}>Elige una categoria</Text>;
+    _headerComponent = () => <Text style={styles.title}>Elija un ejercicio</Text>;
 
     // Render any loading content that you like here
     render() {
@@ -101,7 +105,7 @@ class Category extends React.Component {
             <TouchableOpacity style={[styles.exercise, {backgroundColor: this.props.category.color}]}
                               onPress={this.activeIcon.bind(this)} activeOpacity={1}
             >
-                <Image source={(this.state.active) ? this.props.category.iconActive : this.props.category.icon}
+                <Image source={this.props.category.icon}
                        style={styles.image}/>
                 <Text style={styles.nameCategory}>
                     {this.props.category.title}
@@ -134,9 +138,10 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     image:{
-        width: 100,
-        height: 100,
-        resizeMode: 'contain'
+        width: 110,
+        height: 110,
+        resizeMode: 'contain',
+        marginBottom:5
     },
     exercise:{
         borderRadius: 8,
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
     },
     nameCategory:{
         color: Colors.APHASIA_WHITE,
-        fontSize: 16,
+        fontSize: 14,
         textTransform: 'uppercase'
     },
     loading:{

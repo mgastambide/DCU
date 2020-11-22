@@ -7,11 +7,17 @@ import HomeScreen from '../screens/HomeScreen';
 import Colors from "../constants/Colors";
 import ListeningScreen from '../screens/Listening/ListeningScreen';
 import ListeningExerciseScreen from '../screens/Listening/ListeningExerciseScreen';
+import SurplusExerciseScreen from '../screens/Surplus/SurplusExerciseScreen';
+import ToSelectExerciseScreen from '../screens/ToSelect/ToSelectExerciseScreen';
+import WhoIsWhoExerciseScreen from '../screens/Who_is_who/WhoIsWhoExerciseScreen';
 
 const HomeStack = createStackNavigator({
     Home: HomeScreen,
     Listening: ListeningScreen,
     ListeningExercise: ListeningExerciseScreen,
+    SurplusExercise: SurplusExerciseScreen,
+    ToSelectExercise: ToSelectExerciseScreen,
+    WhoIsWhoExercise: WhoIsWhoExerciseScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -31,8 +37,8 @@ RewardsStack.navigationOptions = {
     tabBarLabel: 'Mi Perfil',
     tabBarIcon: ({ focused }) => {
         return (focused)
-            ? <Icon name='gift' type={'font-awesome'} color={Colors.APHASIA_BLUE} size={20}/>
-            : <Icon name='gift' type={'font-awesome'} color={Colors.APHASIA_GREY1} size={20}/>
+            ? <Icon name='user' type={'font-awesome'} color={Colors.APHASIA_BLUE} size={20}/>
+            : <Icon name='user' type={'font-awesome'} color={Colors.APHASIA_GREY1} size={20}/>
     },
 };
 

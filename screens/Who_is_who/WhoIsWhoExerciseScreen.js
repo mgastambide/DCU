@@ -15,7 +15,7 @@ import Colors from '../../constants/Colors';
 import {Icon} from 'react-native-elements';
 import HeaderNavigator from '../../navigation/HeaderNavigator';
 
-export default class ListeningExerciseScreen extends React.Component {
+export default class WhoIsWhoExerciseScreen extends React.Component {
 
     static navigationOptions = {
         headerShown: null
@@ -27,51 +27,94 @@ export default class ListeningExerciseScreen extends React.Component {
         super(properties);
 
         this.state = {
-            sound: {},
-            isLoop: false,
             words: [
                 {
                     id: 0,
                     title: 'bicicleta',
-                    sound: '../../assets/sounds/bicicleta.mp3',
-                    image: 'https://cdn1.iconfinder.com/data/icons/bikes-on-circle/256/circle_bike-cruiser-flyer-mens-circle-512.png'
+                    words: 'Hombre / Rubrio / Con Bigote / Con Lentes',
+                    images: [
+                        {
+                            id: 0,
+                            image: 'https://image.freepik.com/foto-gratis/chico-rubio-gafas-solo-retrato_53876-60070.jpg',
+                        },
+                        {
+                            id: 1,
+                            image: 'https://i.blogs.es/e8b5dc/color-de-ropa-para-cabello-rubio-18-/450_1000.jpg',
+                        }
+                    ],
+                    image_correct: 'https://image.freepik.com/foto-gratis/chico-rubio-gafas-solo-retrato_53876-60070.jpg'
                 },
                 {
                     id: 1,
                     title: 'paloma',
-                    sound: '../../assets/sounds/paloma.mp3',
-                    image: 'https://cdn.pixabay.com/photo/2012/04/12/12/36/pigeon-29841__340.png'
+                    words: 'Adulto / Sin Sombrero / Pelo Negro / Ojos Azules',
+                    images: [
+                        {
+                            id: 0,
+                            image: 'https://piruliru.com/wp-content/uploads/2019/10/sombrero-nino-ballenas02.jpg',
+                        },
+                        {
+                            id: 1,
+                            image: 'https://c8.alamy.com/compes/p96cn8/milan-junio-18-hombre-con-ojos-azules-y-pelo-negro-retrato-antes-de-giorgio-armani-fashion-show-la-semana-de-la-moda-de-milan-street-style-el-18-de-junio-de-2018-en-mi-p96cn8.jpg',
+                        }
+                    ],
+                    image_correct: 'https://c8.alamy.com/compes/p96cn8/milan-junio-18-hombre-con-ojos-azules-y-pelo-negro-retrato-antes-de-giorgio-armani-fashion-show-la-semana-de-la-moda-de-milan-street-style-el-18-de-junio-de-2018-en-mi-p96cn8.jpg'
                 },
                 {
                     id: 2,
                     title: 'perro',
-                    sound: '../../assets/sounds/perro.mp3',
-                    image: 'https://seeklogo.com/images/B/black-dog-circle-logo-7032FEC424-seeklogo.com.png'
-                }
-            ],
-            letters: [
-                {
-                    id: 0,
-                    title: 'm',
-                    sound: '../../assets/sounds/m.mp3',
+                    words: 'Mujer / Pelirroja / Camisa Blanca / Con Lentes',
+                    images: [
+                        {
+                            id: 0,
+                            image: 'https://image.freepik.com/foto-gratis/mujer-negocios-pelirroja-gafas_151013-726.jpg',
+                        },
+                        {
+                            id: 1,
+                            image: 'https://c8.alamy.com/compes/w9mcg8/retrato-de-una-joven-gordito-hombre-pelirroja-en-una-camisa-negra-que-se-enfrenta-a-la-camara-aislado-en-un-fondo-blanco-w9mcg8.jpg',
+                        }
+                    ],
+                    image_correct: 'https://image.freepik.com/foto-gratis/mujer-negocios-pelirroja-gafas_151013-726.jpg'
                 },
                 {
-                    id: 1,
-                    title: 'e',
-                    sound: '../../assets/sounds/e.mp3',
+                    id: 3,
+                    title: 'perro',
+                    words: 'Hombre / Asiatico / Con Traje / Pelo Con Canas',
+                    images: [
+                        {
+                            id: 0,
+                            image: 'https://images.pexels.com/users/avatars/563038/rokibul-hasan-766.jpeg?w=256&h=256&fit=crop&auto=compress',
+                        },
+                        {
+                            id: 1,
+                            image: 'https://ae01.alicdn.com/kf/HTB15bZqKpXXXXb7XXXXq6xXFXXXj/Hombre-Pelucas-Corto-Negro-Blanco-Hombres-de-Mediana-Edad-Pelo-Sint-tico-Falso-Transpirable-Gris-Viejo.jpg_Q90.jpg',
+                        }
+                    ],
+                    image_correct: 'https://ae01.alicdn.com/kf/HTB15bZqKpXXXXb7XXXXq6xXFXXXj/Hombre-Pelucas-Corto-Negro-Blanco-Hombres-de-Mediana-Edad-Pelo-Sint-tico-Falso-Transpirable-Gris-Viejo.jpg_Q90.jpg'
                 },
                 {
-                    id: 2,
-                    title: 'g',
-                    sound: '../../assets/sounds/g.mp3',
-                }
+                    id: 4,
+                    title: 'perro',
+                    words: 'Bebe / Durmiendo / Con Gorro / Con Mamadera',
+                    images: [
+                        {
+                            id: 0,
+                            image: 'https://previews.123rf.com/images/ferli/ferli1507/ferli150700623/42160996-retrato-de-cuerpo-entero-del-peque%C3%B1o-beb%C3%A9-adorable-acostado-en-el-piso.jpg',
+                        },
+                        {
+                            id: 1,
+                            image: 'https://http2.mlstatic.com/original-bebe-reborn-vinilo-cuerpo-completo-realista-D_Q_NP_897926-MLM27495406231_062018-F.webp',
+                        }
+                    ],
+                    image_correct: 'https://http2.mlstatic.com/original-bebe-reborn-vinilo-cuerpo-completo-realista-D_Q_NP_897926-MLM27495406231_062018-F.webp'
+                },
             ],
             selectedItem: {},
             selected: '',
+            images: [],
             border: Colors.APHASIA_GREY0,
             total_correct: 0,
             total_incorrect: 0,
-            idExercise: 0
         };
     }
 
@@ -79,104 +122,18 @@ export default class ListeningExerciseScreen extends React.Component {
         this._isMounted = true;
         let total_correct = this.props.navigation.getParam('total_correct');
         let total_incorrect = this.props.navigation.getParam('total_incorrect');
-        let idExercise = this.props.navigation.getParam('idExercise');
-
         let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
-        if(idExercise === '2'){
-            selectedItem = this.state.letters[Math.floor(Math.random()*this.state.letters.length)];
-            this.setState({words: this.state.letters})
-        }
 
         (total_correct) && this.setState({total_correct});
         (total_incorrect) && this.setState({total_incorrect});
-        (idExercise) && this.setState({idExercise});
-        
-        this.setState({selectedItem})
-        this.chargeSound(selectedItem.sound, idExercise);
-
-    }
-
-    chargeSound(soundSelected, idExercise){
-
-        Sound.setCategory('Playback', true); // true = mixWithOthers
-
-        const bike = new Sound(require('../../assets/sounds/bicicleta.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const dog = new Sound(require('../../assets/sounds/perro.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const bird = new Sound(require('../../assets/sounds/paloma.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_m = new Sound(require('../../assets/sounds/m.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_e = new Sound(require('../../assets/sounds/e.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_g = new Sound(require('../../assets/sounds/g.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        let itemSelected = '';
-        switch (soundSelected){
-            case '../../assets/sounds/bicicleta.mp3':
-                itemSelected = bike;
-                break;
-            case '../../assets/sounds/perro.mp3':
-                itemSelected = dog;
-                break;
-            case '../../assets/sounds/m.mp3':
-                itemSelected = letter_m;
-                break;
-            case '../../assets/sounds/e.mp3':
-                itemSelected = letter_e;
-                break;
-            case '../../assets/sounds/g.mp3':
-                itemSelected = letter_g;
-                break;
-            default:
-                itemSelected = bird;
-                break;
-        }
-
-        this.setState({ sound: itemSelected });
+        (selectedItem) && console.log(selectedItem);
+        (selectedItem) && this.setState({selectedItem, images: selectedItem.images});
 
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
-
-    _play = () => {
-        if(this.state.sound !== undefined){
-            this.state.sound.play();
-        }
-    };
-
-    _stop = () => {
-        if(this.state.sound !== undefined) {
-            this.state.sound.stop()
-        }
-    };
 
     _headerComponent = () => <View style={{paddingTop:20, width: Dimensions.get('window').width - 20}}>
 
@@ -189,8 +146,8 @@ export default class ListeningExerciseScreen extends React.Component {
         {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
-                <Text style={{fontSize:18, fontWeight: 'bold'}}>
-                    Presiona abajo para oir la palabra
+                <Text style={{fontSize:18, fontWeight: 'bold', textAlign: 'center'}}>
+                    Seleccione la imagen correcta, según la siguiente descripción
                 </Text>
             </View>
         }
@@ -209,26 +166,24 @@ export default class ListeningExerciseScreen extends React.Component {
             </View>
         }
 
-        <TouchableOpacity onPress={() => this._play()} activeOpacity={1}
-                          style={[styles.speaker, {borderColor: this.state.border}]}
-        >
-            <Icon name='volume-up' type={'font-awesome'}
-                  color={(this.state.selected === '') ? Colors.APHASIA_WHITE : this.state.border} size={50}
-            />
-        </TouchableOpacity>
+        <View style={[styles.speaker, {borderColor: this.state.border}]}>
+            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:16, textAlign: 'center'}}>
+                {this.state.selectedItem.words}
+            </Text>
+        </View>
 
     </View>;
 
     _footerComponent = () =>  <View style={styles.buttons}>
 
-        <TouchableOpacity onPress={() => (this.state.words.length > 1) ? this.removeOneOptions() : null} style={[styles.button, {backgroundColor: (this.state.words.length > 1) ? Colors.APHASIA_ORANGE : Colors.APHASIA_GREY}]}
-            activeOpacity={(this.state.words.length > 1) ? .8 : 1}
+        <TouchableOpacity onPress={() => (this.state.images.length > 1) ? this.removeOneOptions() : null} style={[styles.button, {backgroundColor: (this.state.images.length > 1) ? Colors.APHASIA_ORANGE : Colors.APHASIA_GREY}]}
+            activeOpacity={(this.state.images.length > 1) ? .8 : 1}
         >
             <Icon name={'lightbulb-o'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
             <Text style={styles.textButton}>Ayuda</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.push('ListeningExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
+        <TouchableOpacity onPress={() => this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
                           style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN}]}
         >
             <Icon name={'step-forward'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
@@ -243,10 +198,10 @@ export default class ListeningExerciseScreen extends React.Component {
     </View>
 
     clickItem(item){
-        if(this.state.selectedItem.title === item.title){
+        if(this.state.selectedItem.image_correct === item.image){
             this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, total_correct: this.state.total_correct+1});
             setTimeout(() => {
-                    this.props.navigation.push('ListeningExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
+                    this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
                 }, 1000
             )
         }else{
@@ -260,15 +215,15 @@ export default class ListeningExerciseScreen extends React.Component {
 
     removeOneOptions(){
         let index = 0;
-        let words = [...this.state.words]
+        let words = [...this.state.images]
         for (let i = 0; i < words.length; i++) {
-            if(words[i].title !== this.state.selectedItem.title){
+            if(words[i].image !== this.state.selectedItem.image_correct){
                 index = words[i].id;
                 break;
             }
         }
         let new_array = words.filter(item => item.id !== index);
-        this.setState({words: new_array});
+        this.setState({images: new_array});
     }
 
     render() {
@@ -278,11 +233,11 @@ export default class ListeningExerciseScreen extends React.Component {
                 <View style={styles.container}>
                     <FlatList
                         ListHeaderComponent={this._headerComponent}
-                        data={this.state.words}
-                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)} idExercise={this.state.idExercise}
+                        data={this.state.images}
+                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)}
                         />}
                         keyExtractor={item => item.id}
-                        numColumns={3}
+                        numColumns={2}
                         contentContainerStyle={styles.center}
                         ListFooterComponent={this._footerComponent}
                     />
@@ -293,37 +248,12 @@ export default class ListeningExerciseScreen extends React.Component {
 }
 
 class Box extends React.Component {
-    state={
-        active: false
-    }
-
-    activeIcon(){
-        this.setState({active: !this.state.active})
-        setTimeout(() => {
-                this.setState({active: false})
-                this.props.callback()
-            }, 1000
-        )
-    }
-
     render() {
         return (
-            <TouchableOpacity style={[styles.box, {paddingHorizontal: (this.props.idExercise === '1') ? 10 : 20}]}
-                              onPress={this.activeIcon.bind(this)}
+            <TouchableOpacity style={[styles.box]}
+                              onPress={() => this.props.callback()}
             >
-                {
-                    (this.props.idExercise === '1')
-                    ?
-                    <React.Fragment>
-                        <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
-                        <Text style={styles.nameCategory}>
-                            {this.props.item.title}
-                        </Text>
-                    </React.Fragment>
-                }
+                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
             </TouchableOpacity>
         )
     }
@@ -348,10 +278,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
         backgroundColor: Colors.APHASIA_BLUE,
-        minWidth: '25%'
+        minWidth: '30%'
     },
     speaker:{
         borderRadius: 8,
@@ -395,9 +323,10 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     imageIcon:{
-        width:70,
-        height:70,
-        resizeMode: 'contain',
+        width:150,
+        height:150,
+        resizeMode: 'cover',
+        borderRadius:8
     },
     center:{
         flex:1,

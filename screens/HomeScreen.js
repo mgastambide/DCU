@@ -1,12 +1,10 @@
 import * as React from 'react';
 import {
     View, Text, ImageBackground, ActivityIndicator, StyleSheet,
-    FlatList, Image, TouchableOpacity,
+    FlatList, Image, TouchableOpacity, StatusBar
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import Colors from '../constants/Colors';
 import HeaderNavigator from '../navigation/HeaderNavigator';
-import {Icon} from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
 
@@ -33,7 +31,7 @@ export default class HomeScreen extends React.Component {
             },
             {
                 id: '2',
-                title: 'Selccionar',
+                title: 'Seleccionar',
                 icon: require('../assets/images/Icons/person_group.png'),
                 color: Colors.APHASIA_BLUE,
                 nav: 'ToSelectExercise'
@@ -61,6 +59,7 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <ImageBackground source={require('../assets/images/background-app-white.jpg')} style={styles.containerImageBackground}>
+                <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={Colors.APHASIA_GREY2} animated />
                 {
                     this.state.loading
                         ? <ActivityIndicator color={'grey'}/>

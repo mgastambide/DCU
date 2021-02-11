@@ -27,6 +27,7 @@ export default class CreateAccountScreen extends React.Component {
         error:'',
         from_welcome: false,
         checked: false,
+        is_tutor: false,
     };
 
     static navigationOptions = {
@@ -96,6 +97,18 @@ export default class CreateAccountScreen extends React.Component {
                                 placeholderTextColor={Colors.APHASIA_WHITE}
                             />
 
+                            <TouchableOpacity style={{flexDirection:'row', alignItems: 'center', paddingBottom:10}} onPress={() => this.setState({is_tutor: !this.state.is_tutor, checked:false})}>
+                                <CheckBox
+                                    value={this.state.is_tutor}
+                                    onValueChange={() => this.setState({is_tutor: !this.state.is_tutor, checked:false})}
+                                    style={{padding:0, margin:0}}
+                                    tintColors={{ true: Colors.APHASIA_RED, false: Colors.APHASIA_GREY3 }}
+                                />
+                                <Text style={{color:Colors.APHASIA_WHITE, fontSize:16}}>Soy Terapeuta o Tutor</Text>
+                            </TouchableOpacity>
+
+                            {
+                            (!this.state.is_tutor) &&
                             <TouchableOpacity style={{flexDirection:'row', alignItems: 'center', paddingBottom:10}} onPress={() => this.setState({checked: !this.state.checked})}>
                                 <CheckBox
                                     value={this.state.checked}
@@ -105,6 +118,8 @@ export default class CreateAccountScreen extends React.Component {
                                 />
                                 <Text style={{color:Colors.APHASIA_WHITE, fontSize:16}}>¿Tiene un terapeuta/tutor?</Text>
                             </TouchableOpacity>
+                            }
+                            
 
                             {
                                 this.state.checked &&

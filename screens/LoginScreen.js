@@ -14,6 +14,7 @@ import {
 import Colors from '../constants/Colors';
 import AsyncStorage from '@react-native-community/async-storage';
 import WhiteButton from '../components/WhiteButton';
+import Config from '../constants/Config';
 
 export default class LoginScreen extends React.Component {
   state = {
@@ -59,23 +60,17 @@ export default class LoginScreen extends React.Component {
   };
 
   onPressLogin() {
-    let count = this.state.userName.length;
-    let count_2 = this.state.password.length;
-    if (count < 5 || count_2 < 5) {
-      this.setState({
-        error:
-          count < 5
-            ? 'Por favor ingrese una dirección de correo electronico valida.'
-            : 'Por favor ingrese una contraseña más larga.',
-      });
+    this.setState({status: true});
 
-      setTimeout(() => {
-        this.setState({error: ''});
-      }, 2000);
-    } else {
-      this.validate(this.state.userName);
-    }
-  }
+    Config.apiPost('login', {email: this.state.userName, password:this.state.password})
+        .then(async (user) => {
+          await AsyncStorage.setItem('@Token', user.api_token);
+          this.setState({status: false});
+          this.props.navigation.navigate('App');
+
+        })
+        .catch(Config.apiCatchErrors.bind(this));
+}
 
   render() {
     return (
@@ -117,6 +112,7 @@ export default class LoginScreen extends React.Component {
             placeholder={this.state.placeholderUserName}
             keyboardType={'email-address'}
             placeholderTextColor={Colors.APHASIA_WHITE}
+            autoCapitalize={'none'}
           />
 
           <TextInput
@@ -125,6 +121,8 @@ export default class LoginScreen extends React.Component {
             onChangeText={(password) => this.setState({password})}
             placeholder={'********'}
             placeholderTextColor={Colors.APHASIA_WHITE}
+            autoCapitalize={'none'}
+            textContentType={'password'}
           />
 
           <View style={styles.containerButton}>

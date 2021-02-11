@@ -2,9 +2,10 @@ import React from 'react';
 import {
     ActivityIndicator,
     ImageBackground,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import Config from '../constants/Config';
 
 export default class AuthLoadingScreen extends React.Component {
 
@@ -13,16 +14,21 @@ export default class AuthLoadingScreen extends React.Component {
         this._bootstrapAsync();
     }
 
-    UNSAFE_componentWillMount() {
-
-    }
-
     // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
         const userToken = await AsyncStorage.getItem('@Token');
 
         if(userToken){
-            this.props.navigation.navigate('App');
+            Config.apiPostToken('me')
+            .then((user) => {
+                    if(user.role_id === 3){
+                        this.props.navigation.navigate('App');
+                    }else{
+                        this.props.navigation.navigate('Therapist');
+                    }
+            })
+            .catch(Config.apiCatchErrors.bind(this));
+           
         }else {
             this.props.navigation.navigate('Auth');
         }

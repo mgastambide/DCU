@@ -10,6 +10,8 @@ import ListeningExerciseScreen from '../screens/Listening/ListeningExerciseScree
 import SurplusExerciseScreen from '../screens/Surplus/SurplusExerciseScreen';
 import ToSelectExerciseScreen from '../screens/ToSelect/ToSelectExerciseScreen';
 import WhoIsWhoExerciseScreen from '../screens/Who_is_who/WhoIsWhoExerciseScreen';
+import MyProfileScreen from '../screens/MyProfileScreen';
+import AchievementsScreen from '../screens/AchievementsScreen';
 
 const HomeStack = createStackNavigator({
     Home: HomeScreen,
@@ -29,11 +31,11 @@ HomeStack.navigationOptions = {
     },
 };
 
-const RewardsStack = createStackNavigator({
-    Rewards: HomeScreen,
+const MyProfileStack = createStackNavigator({
+    MyProfile: MyProfileScreen,
 });
 
-RewardsStack.navigationOptions = {
+MyProfileStack.navigationOptions = {
     tabBarLabel: 'Mi Perfil',
     tabBarIcon: ({ focused }) => {
         return (focused)
@@ -43,7 +45,7 @@ RewardsStack.navigationOptions = {
 };
 
 const MyAchievementsStack = createStackNavigator({
-    MyAchievements: HomeScreen,
+    MyAchievements: AchievementsScreen,
 });
 
 MyAchievementsStack.navigationOptions = {
@@ -58,7 +60,7 @@ MyAchievementsStack.navigationOptions = {
 export default createBottomTabNavigator({
         HomeApp: HomeStack,
         Achievements: MyAchievementsStack,
-        Rewards: RewardsStack,
+        MyProfile: MyProfileStack,
     },
     {
         tabBarOptions: {

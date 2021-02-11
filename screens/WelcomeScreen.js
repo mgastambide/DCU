@@ -6,7 +6,8 @@ import {
     ScrollView,
     ActivityIndicator,
     Modal, UIManager, Platform,
-    Image, LayoutAnimation, TouchableOpacity, ImageBackground, Dimensions
+    Image, LayoutAnimation, TouchableOpacity, ImageBackground, Dimensions,
+    StatusBar
 } from 'react-native';
 import {EventRegister} from "react-native-event-listeners";
 import Colors from "../constants/Colors";
@@ -43,27 +44,27 @@ export default class WelcomeScreen extends React.Component {
             slides:[
                 {
                     key: "0",
-                    title: "Paso 1",
-                    text: "La mejor terapia para la afasia está diseñada para usted por un patólogo del habla.\n" +
-                        "Debe basarse en sus fortalezas y debilidades.\n" +
-                        "Debería ayudarlo a practicar habilidades para la vida real. Debe usar más que solo palabras e imágenes.\n" +
-                        "Esta App puede ser parte de esa terapia, o si ha terminado la terapia, puede ayudarlo a seguir practicando ",
+                    title: "Afasia Anómica DCU",
+                    text: "Es una app destinada a personas con afasia anómica como para terapeutas.\n" +
+                        "La aplicación fue desarrollada para ayudar a que las personas puedan practicar sus habilidades para la vida real.\n" +
+                        "Como tambien brindar una herramienta para que los terapeutas puedan puedan llevar un control sobre el progreso de sus alumnos y asi ser parte de la terapia.\n" +
+                        "Tambien es una manera de poder seguir practicando si la terapia ha terminado.",
                     image: "https://data.pixiz.com/output/user/frame/preview/400x400/0/3/8/4/2374830_d94a1.jpg",
                     backgroundColor: Colors.APHASIA_ORANGE
                 },
                 {
                     key: "1",
-                    title: "Paso 2",
-                    text: "Elija un idioma y elija en qué quiere trabajar: leer, deletrear, escuchar o nombrar .\n" +
-                        "Luego, elija una tarea . Cambie la configuración de la tarea para que sea más difícil o más fácil.\n" +
-                        "Hay listas de palabras según la dificultad o los temas.",
+                    title: "Uso de la App",
+                    text: "No es necesario crear una cuenta para poder acceder a los ejercicios.\n" +
+                        "Sin embargo, la app esta configurada para el modo invitado (Sin cuenta) en nivel principiante, si desea cambiar esta configuracion y acceder al resto de las funciones, debe crear una cuenta del tipo alumno.\n" +
+                        "Ademas el terapeuta puede crear una cuenta y asociar alumnos con cuenta para tener un listado de sus progresos en una seccion especifica para ellos, como asi tambien cambiarle el nivel.",
                     image: "https://data.pixiz.com/output/user/frame/preview/400x400/0/3/8/4/2374830_d94a1.jpg",
                     backgroundColor: Colors.APHASIA_GREY3
                 },
                 {
                     key: "2",
                     title: "Paso 3",
-                    text: "Intente decir el nombre de la imagen que se muestra. Si necesitas ayuda, sigue presionando el ícono: Si crees que dijiste la palabra correctamente, presiona la marca: Esta tarea no te escucha hablar, pero puedes verificar la respuesta.",
+                    text: "Lorem ipsum dolor sit amet consectetur adipiscing elit, taciti pretium nullam egestas in potenti aptent, nibh erat eros facilisis montes condimentum.",
                     image: "https://data.pixiz.com/output/user/frame/preview/400x400/0/3/8/4/2374830_d94a1.jpg",
                     backgroundColor: Colors.APHASIA_RED
                 }
@@ -103,7 +104,7 @@ export default class WelcomeScreen extends React.Component {
     _renderItem = props => (
         <View style={{flex:1, backgroundColor:props.item.backgroundColor}}>
             <View style={styles.containerImage}>
-                <Image source={{uri: props.item.image}} style={styles.step_image}/>
+                <Image source={require('../assets/images/icon.jpg')} style={styles.step_image}/>
             </View>
             <View style={styles.containerInfo}>
                 <ScrollView style={{flex:1, paddingBottom: 30}}>
@@ -124,7 +125,7 @@ export default class WelcomeScreen extends React.Component {
         return(
 
             <View style={styles.container}>
-
+                <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={'transparent'} animated />
                 {
                     this.state.loading ? <ActivityIndicator animating={this.state.loading} style={{marginVertical: 340}} color={Colors.PRIMARY_COLOR}/>
                         :
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
         paddingBottom:5,
         paddingHorizontal:9,
         fontSize:Platform.OS === 'android' ? 16 : 20,
-        color:Colors.PRIMARY_COLOR,
+        color:Colors.APHASIA_WHITE,
     },
     containerImage:{
         flex:1,

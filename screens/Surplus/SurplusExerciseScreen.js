@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    BackHandler, Dimensions,
+    Dimensions,
     FlatList,
     Image,
     ImageBackground,
@@ -8,12 +8,17 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator
 } from 'react-native';
 
-import Sound from 'react-native-sound';
+import Config from '../../constants/Config';
 import Colors from '../../constants/Colors';
 import {Icon} from 'react-native-elements';
 import HeaderNavigator from '../../navigation/HeaderNavigator';
+import CommonFeatures from '../../constants/CommonFeatures';
+import Sound from 'react-native-sound';
+let success_answer = '';
+let fail_answer = '';
 
 export default class SurplusExerciseScreen extends React.Component {
 
@@ -27,129 +32,16 @@ export default class SurplusExerciseScreen extends React.Component {
         super(properties);
 
         this.state = {
-            words: [
-                {
-                    id: 0,
-                    title: 'Animales',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://cdn.pixabay.com/photo/2012/04/12/12/36/pigeon-29841__340.png',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://seeklogo.com/images/B/black-dog-circle-logo-7032FEC424-seeklogo.com.png',
-                        },
-                        {
-                            id: 2,
-                            image: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/55ea2a5f168f4c609d51a9f1011a500d_9366/Pelota_Oficial_Partidos_Argentina_19_(UNISEX)_Blanco_DY2520_01_standard.jpg'
-                        },
-                        {
-                            id: 3,
-                            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_cpLZOX8GZQKNkbayZOmoyxeONueTOUGa3g&usqp=CAU'
-                        }
-                    ],
-                    image_correct: 'https://assets.adidas.com/images/w_600,f_auto,q_auto/55ea2a5f168f4c609d51a9f1011a500d_9366/Pelota_Oficial_Partidos_Argentina_19_(UNISEX)_Blanco_DY2520_01_standard.jpg'
-                },
-                {
-                    id: 1,
-                    title: 'Frutas',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://i.pinimg.com/736x/1a/c3/b0/1ac3b044aff578b925f6e052af617c3e.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://st.depositphotos.com/2435397/3667/i/600/depositphotos_36673199-stock-photo-pineapple.jpg',
-                        },
-                        {
-                            id: 2,
-                            image: 'https://s.clipartkey.com/mpngs/s/28-282709_manzana-dibujo-animados-png.png'
-                        },
-                        {
-                            id: 3,
-                            image: 'https://st2.depositphotos.com/4187579/6211/v/950/depositphotos_62113727-stock-illustration-grapes.jpg'
-                        }
-                    ],
-                    image_correct: 'https://i.pinimg.com/736x/1a/c3/b0/1ac3b044aff578b925f6e052af617c3e.jpg'
-                },
-                {
-                    id: 2,
-                    title: 'Deportes',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://previews.123rf.com/images/leonido/leonido1009/leonido100900077/7797638-jugadores-de-f%C3%BAtbol-ilustraci%C3%B3n-color-para-dise%C3%B1adores-.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://previews.123rf.com/images/leonido/leonido1009/leonido100900107/7797588-ilustraci%C3%B3n-de-jugadores-de-baloncesto-.jpg',
-                        },
-                        {
-                            id: 2,
-                            image: 'https://previews.123rf.com/images/kapona/kapona1701/kapona170100003/70666676-jugador-de-golf-ilustraci%C3%B3n.jpg'
-                        },
-                        {
-                            id: 3,
-                            image: 'https://image.freepik.com/vector-gratis/vector-hombre-leyendo-periodico_23-2147495891.jpg'
-                        }
-                    ],
-                    image_correct: 'https://image.freepik.com/vector-gratis/vector-hombre-leyendo-periodico_23-2147495891.jpg'
-                },
-                {
-                    id: 3,
-                    title: 'Transportes',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://image.freepik.com/vector-gratis/ilustracion-auto-clasico_169137-34.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://3.bp.blogspot.com/-VTjKCaf59XI/TjDhYdzBBsI/AAAAAAAAAZE/94TNXPNRelA/s1600/colectivo.jpg',
-                        },
-                        {
-                            id: 2,
-                            image: 'https://static8.depositphotos.com/1404177/881/v/950/depositphotos_8819758-stock-illustration-chair-red-classic-detailed-vector.jpg'
-                        },
-                        {
-                            id: 3,
-                            image: 'https://fscomps.fotosearch.com/compc/CSP/CSP230/grande-azul-cami%C3%B3n-ilustraci%C3%B3n-dibujo__k23661093.jpg'
-                        }
-                    ],
-                    image_correct: 'https://static8.depositphotos.com/1404177/881/v/950/depositphotos_8819758-stock-illustration-chair-red-classic-detailed-vector.jpg'
-                },
-                {
-                    id: 4,
-                    title: 'Ropa',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://d26lpennugtm8s.cloudfront.net/stores/317/338/products/s-l1600-171-2c0ac1de2e4f1d77d315633429964761-1024-1024.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://universoventura.vteximg.com.br/arquivos/ids/180780-500-500/Pantalon-Columbia-Silver-Ridge-Trekking-Cargo-Mujer-Fade-Ink-AL8003-419-2.jpg?v=637110806451470000',
-                        },
-                        {
-                            id: 2,
-                            image: 'https://static.mercadoshops.com/campera-casual-alpinestars-expo-bordo_iZ800501761XvZxXpZ1XfZ160126555-694821048-1.jpgXsZ160126555xIM.jpg'
-                        },
-                        {
-                            id: 3,
-                            image: 'https://ae01.alicdn.com/kf/HTB1m0h6aN_rK1RkHFqDq6yJAFXaM/Camiseta-con-estampado-de-insectos-para-mujer-remera-con-ilustraci-n-de-insectos-y-Entomolog-a.jpg_q50.jpg'
-                        }
-                    ],
-                    image_correct: 'https://d26lpennugtm8s.cloudfront.net/stores/317/338/products/s-l1600-171-2c0ac1de2e4f1d77d315633429964761-1024-1024.jpg'
-                },
-            ],
+            images: [],
+            getWidth : '100%',
+            getHeight: '100%',
             selectedItem: {},
             selected: '',
-            images: [],
             border: Colors.APHASIA_GREY0,
             total_correct: 0,
             total_incorrect: 0,
+            indexExercise: 0,
+            loading: true
         };
     }
 
@@ -157,32 +49,77 @@ export default class SurplusExerciseScreen extends React.Component {
         this._isMounted = true;
         let total_correct = this.props.navigation.getParam('total_correct');
         let total_incorrect = this.props.navigation.getParam('total_incorrect');
-        let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
-
+        let indexExercise = this.props.navigation.getParam('indexExercise');
         (total_correct) && this.setState({total_correct});
         (total_incorrect) && this.setState({total_incorrect});
-        (selectedItem) && console.log(selectedItem);
-        (selectedItem) && this.setState({selectedItem, images: selectedItem.images});
 
+        Config.apiGet('surplus_exercise')
+        .then((Items) => {
+            let images = [];
+            let selectedItem = {};
+
+            if(indexExercise){
+                
+                if(indexExercise === Items.length){
+                    indexExercise = 0;
+                }
+
+                selectedItem = Items[indexExercise];
+                images = [
+                        {id: 0, image: Items[indexExercise].wrong_image},
+                        {id: 1, image: Items[indexExercise].group_image_one},
+                        {id: 2, image: Items[indexExercise].group_image_two},
+                        {id: 3, image: Items[indexExercise].group_image_three}
+                    ];
+            }else{
+                indexExercise = 0;
+                selectedItem = Items[0];
+                images = [
+                    {id: 0, image: Items[0].wrong_image},
+                    {id: 1, image: Items[0].group_image_one},
+                    {id: 2, image: Items[0].group_image_two},
+                    {id: 3, image: Items[0].group_image_three}
+                ];
+            }
+            images = CommonFeatures.shuffleArray(images);
+            this.setState({images, selectedItem, indexExercise, loading: false})
+            success_answer = new Sound(require('../../assets/sound/success_answer.mp3'))
+            fail_answer = new Sound(require('../../assets/sound/fail_answer.mp3'))
+        })
+        .catch(Config.apiCatchErrors.bind(this));
+
+        //let selectedItem = this.state.words[indexExercise];
+        //let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
+        //(selectedItem) && this.setState({selectedItem, images: selectedItem.images});
+
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
     }
-
+    
     componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
         this._isMounted = false;
     }
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
+    }
 
-    _headerComponent = () => <View style={{paddingTop:20, width: Dimensions.get('window').width - 20}}>
+    _headerComponent = () => <View style={{paddingTop:20, width: '100%'}}>
 
-        <Text style={{backgroundColor: Colors.APHASIA_GREY1, padding: 15, color: Colors.APHASIA_WHITE, textAlign: 'center',
-            borderRadius:8, marginHorizontal:5
-        }}>
-            Total correctas: {this.state.total_correct} / Total incorrectas: {this.state.total_incorrect}
-        </Text>
+        {/* <Text style={styles.total}>
+            Correctas: {this.state.total_correct} / Incorrectas: {this.state.total_incorrect}
+        </Text> */}
 
         {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
-                <Text style={{fontSize:18, fontWeight: 'bold', textAlign: 'center'}}>
-                    Seleccione la imagen errónea de cada grupo
+                <Text style={{fontSize:20, fontWeight: 'bold', textAlign: 'center'}}>
+                    Seleccione el que no pertenece
                 </Text>
             </View>
         }
@@ -190,22 +127,16 @@ export default class SurplusExerciseScreen extends React.Component {
         {
             (this.state.selected === 'correct') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Muy bien!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Muy bien!</Text>
             </View>
         }
 
         {
             (this.state.selected === 'bad') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
             </View>
         }
-
-        <View style={[styles.speaker, {borderColor: this.state.border}]}>
-            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:25, textAlign: 'center'}}>
-                {this.state.selectedItem.title}
-            </Text>
-        </View>
 
     </View>;
 
@@ -218,8 +149,8 @@ export default class SurplusExerciseScreen extends React.Component {
             <Text style={styles.textButton}>Ayuda</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.push('SurplusExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
-                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN}]}
+        <TouchableOpacity onPress={() => this.props.navigation.push('SurplusExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1})}
+                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN, marginHorizontal:15}]}
         >
             <Icon name={'step-forward'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
             <Text style={styles.textButton}>Siguiente</Text>
@@ -233,13 +164,15 @@ export default class SurplusExerciseScreen extends React.Component {
     </View>
 
     clickItem(item){
-        if(this.state.selectedItem.image_correct === item.image){
+        if(this.state.selectedItem.wrong_image === item.image){
+            success_answer.play();
             this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, total_correct: this.state.total_correct+1});
             setTimeout(() => {
-                    this.props.navigation.push('SurplusExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
+                    this.props.navigation.push('SurplusExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1});
                 }, 1000
             )
         }else{
+            fail_answer.play();
             this.setState({selected: 'bad', border: Colors.APHASIA_RED, total_incorrect: this.state.total_incorrect + 1})
             setTimeout(() => {
                     this.setState({selected: '', border: Colors.APHASIA_GREY0})
@@ -252,7 +185,7 @@ export default class SurplusExerciseScreen extends React.Component {
         let index = 0;
         let words = [...this.state.images]
         for (let i = 0; i < words.length; i++) {
-            if(words[i].image !== this.state.selectedItem.image_correct){
+            if(words[i].image !== this.state.selectedItem.wrong_image){
                 index = words[i].id;
                 break;
             }
@@ -265,18 +198,23 @@ export default class SurplusExerciseScreen extends React.Component {
         return(
             <ImageBackground source={require('../../assets/images/background-app-white.jpg')} style={styles.containerImageBackground}>
                 <HeaderNavigator open={() => this.props.navigation.openDrawer()}/>
-                <View style={styles.container}>
-                    <FlatList
-                        ListHeaderComponent={this._headerComponent}
-                        data={this.state.images}
-                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)}
-                        />}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
-                        contentContainerStyle={styles.center}
-                        ListFooterComponent={this._footerComponent}
-                    />
-                </View>
+                {
+                    (this.state.loading)
+                    ? <ActivityIndicator animating={this.state.loading} color={Colors.APHASIA_GREY2} style={{marginVertical: 300}}/>
+                    :  
+                    <View style={styles.container}>
+                        <FlatList
+                            ListHeaderComponent={this._headerComponent}
+                            data={this.state.images}
+                            renderItem={({item, index}) => <Box item={item} callback={() => this.clickItem(item)} index={index}
+                            />}
+                            keyExtractor={item => item.id}
+                            numColumns={2}
+                            contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth}]}
+                            ListFooterComponent={this._footerComponent}
+                        />
+                    </View>
+                }
             </ImageBackground>
         );
     }
@@ -285,10 +223,10 @@ export default class SurplusExerciseScreen extends React.Component {
 class Box extends React.Component {
     render() {
         return (
-            <TouchableOpacity style={[styles.box]}
+            <TouchableOpacity style={[styles.box, {marginRight: (this.props.index === 0 || this.props.index === 2) ? 15 : 0}]}
                               onPress={() => this.props.callback()}
             >
-                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
+                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} resizeMethod={'resize'} />
             </TouchableOpacity>
         )
     }
@@ -312,34 +250,36 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        backgroundColor: Colors.APHASIA_WHITE,
-        minWidth: '20%'
+        marginBottom: 10,
+        width:'100%',
+        backgroundColor: Colors.APHASIA_BLUE,
+        padding:5,
+        flex:1,
     },
     speaker:{
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
         paddingVertical: 15,
         paddingHorizontal: 20,
+        marginBottom:15,
         backgroundColor: Colors.APHASIA_GREY0,
         borderWidth: 3
     },
     buttons:{
         flexDirection: 'row',
-        paddingHorizontal: 15,
-        paddingBottom: 10
+        paddingVertical: 10
     },
     button:{
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: Colors.APHASIA_ORANGE,
         borderRadius:8,
-        margin: 8,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width:'100%',
+        flex:1
     },
     textButton:{
         padding: 10,
@@ -349,19 +289,19 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30
+        paddingVertical: 15
     },
     image:{
         width:150,
         height:150,
         resizeMode: 'contain',
-        marginBottom: 5
+        marginBottom: 5,
     },
     imageIcon:{
-        width:110,
-        height:110,
+        width:120,
+        height:120,
         resizeMode: 'contain',
-        borderRadius:8
+        borderRadius:8,
     },
     center:{
         flex:1,
@@ -371,5 +311,16 @@ const styles = StyleSheet.create({
     nameCategory:{
         textTransform: 'capitalize',
         color: Colors.APHASIA_WHITE
+    },
+    contentArea:{
+        justifyContent:'center'
+    },
+    total:{
+        backgroundColor: Colors.APHASIA_GREY1,
+        padding: 15,
+        color: Colors.APHASIA_WHITE,
+        textAlign: 'center',
+        borderRadius:8,
+        fontSize: 20
     }
 });

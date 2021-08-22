@@ -20,6 +20,7 @@ export default class HeaderNavigator extends React.Component {
         return (
             <View style={styles.container}>
                 <Icon name="menu" color={Colors.APHASIA_GREY3} onPress={ () => this.props.open()} size={35}/>
+                {/* <Icon name="menu" color={Colors.APHASIA_GREY3} onPress={ () => this.props.open()} size={35}/> */}
                 <View style={{flexDirection: 'row'}}>
                     <Image source={require('../assets/images/puzzle_transparent.png')} style={styles.image} />
                     <Image source={require('../assets/images/head_transparent.png')} style={styles.image} />

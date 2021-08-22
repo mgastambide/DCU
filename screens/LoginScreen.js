@@ -66,7 +66,11 @@ export default class LoginScreen extends React.Component {
         .then(async (user) => {
           await AsyncStorage.setItem('@Token', user.api_token);
           this.setState({status: false});
-          this.props.navigation.navigate('App');
+          if(user.role_id === 3){
+            this.props.navigation.navigate('App');
+          }else{
+              this.props.navigation.navigate('Therapist');
+          }
 
         })
         .catch(Config.apiCatchErrors.bind(this));

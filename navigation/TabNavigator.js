@@ -12,6 +12,7 @@ import ToSelectExerciseScreen from '../screens/ToSelect/ToSelectExerciseScreen';
 import WhoIsWhoExerciseScreen from '../screens/Who_is_who/WhoIsWhoExerciseScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import AchievementsScreen from '../screens/AchievementsScreen';
+import IsolatedExerciseScreen from '../screens/Isolated/IsolatedExerciseScreen';
 
 const HomeStack = createStackNavigator({
     Home: HomeScreen,
@@ -20,6 +21,7 @@ const HomeStack = createStackNavigator({
     SurplusExercise: SurplusExerciseScreen,
     ToSelectExercise: ToSelectExerciseScreen,
     WhoIsWhoExercise: WhoIsWhoExerciseScreen,
+    IsolatedExercise: IsolatedExerciseScreen
 });
 
 HomeStack.navigationOptions = {
@@ -59,8 +61,8 @@ MyAchievementsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
         HomeApp: HomeStack,
-        Achievements: MyAchievementsStack,
-        MyProfile: MyProfileStack,
+        //Achievements: MyAchievementsStack,
+        //MyProfile: MyProfileStack,
     },
     {
         tabBarOptions: {

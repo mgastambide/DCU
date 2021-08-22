@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dimensions } from 'react-native';
 import {
     View, Text, ImageBackground, ActivityIndicator, StyleSheet,
     FlatList, Image, TouchableOpacity, StatusBar
@@ -14,34 +15,48 @@ export default class HomeScreen extends React.Component {
 
     state={
         loading: true,
+        getWidth : '100%',
+        getHeight: '100%',
         categories:[
             {
                 id: '0',
-                title: 'Escuchar',
+                title: 'Emparejar',
+                subtitle: 'sonido',
                 icon: require('../assets/images/Icons/person_listening.png'),
                 color: Colors.APHASIA_ORANGE,
                 nav: 'Listening'
             },
             {
                 id: '1',
-                title: '¿Quién es quién?',
+                title: 'Elegi',
+                subtitle: 'personaje',
                 icon: require('../assets/images/Icons/persons_who_is_who.png'),
                 color: Colors.APHASIA_YELLOW,
                 nav: 'WhoIsWhoExercise'
             },
             {
                 id: '2',
-                title: 'Seleccionar',
+                title: 'Emparejar',
+                subtitle: 'palabra',
                 icon: require('../assets/images/Icons/person_group.png'),
                 color: Colors.APHASIA_BLUE,
                 nav: 'ToSelectExercise'
             },
             {
                 id: '3',
-                title: 'Sobra',
+                title: 'Uno',
+                subtitle: 'sobra',
                 icon: require('../assets/images/Icons/person_surplus.png'),
-                color: Colors.APHASIA_BLUE,
+                color: Colors.APHASIA_PURPLE,
                 nav: 'SurplusExercise'
+            },
+            {
+                id: '4',
+                title: 'Palabra',
+                subtitle: 'Aislada',
+                icon: require('../assets/images/Icons/person_isolated.png'),
+                color: Colors.APHASIA_LIGHT_GREEN,
+                nav: 'IsolatedExercise'
             },
         ]
     }
@@ -51,6 +66,21 @@ export default class HomeScreen extends React.Component {
                 this.setState({loading: false})
             }, 1500
         )
+        
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
+    }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
+    }
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
     }
 
     _headerComponent = () => <Text style={styles.title}>Elija un ejercicio</Text>;
@@ -66,18 +96,16 @@ export default class HomeScreen extends React.Component {
                         :
                         <View style={styles.container}>
                             <HeaderNavigator open={() => this.props.navigation.openDrawer()}/>
-                            <View style={styles.safeAreaView}>
                                 <FlatList
-                                    ListHeaderComponent={this._headerComponent}
+                                    //ListHeaderComponent={this._headerComponent}
                                     data={this.state.categories}
                                     renderItem={({item}) => <Category category={item}
                                                                       redirect={(nav) => this.props.navigation.navigate(nav)}
                                     />}
                                     keyExtractor={item => item.id}
                                     numColumns={2}
-                                    contentContainerStyle={styles.center}
+                                    contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth, paddingTop:15}]}
                                 />
-                            </View>
                         </View>
                 }
             </ImageBackground>
@@ -95,7 +123,7 @@ class Category extends React.Component {
         setTimeout(() => {
                 this.setState({active: false})
                 this.props.redirect(this.props.category.nav)
-            }, 1500
+            }, 1000
         )
     }
 
@@ -108,6 +136,9 @@ class Category extends React.Component {
                        style={styles.image}/>
                 <Text style={styles.nameCategory}>
                     {this.props.category.title}
+                </Text>
+                <Text style={styles.nameCategory}>
+                    {this.props.category.subtitle}
                 </Text>
 
                 {
@@ -124,7 +155,6 @@ class Category extends React.Component {
 const styles = StyleSheet.create({
     containerImageBackground: {
         width: '100%',
-        height: '100%',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -134,11 +164,11 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%'
+        width: '100%',
     },
     image:{
-        width: 110,
-        height: 110,
+        width: 90,
+        height: 90,
         resizeMode: 'contain',
         marginBottom:5
     },
@@ -149,6 +179,8 @@ const styles = StyleSheet.create({
         margin: 10,
         paddingVertical: 15,
         paddingHorizontal: 20,
+        width: '100%',
+        flex:1
     },
     center:{
         flex:1,
@@ -158,17 +190,16 @@ const styles = StyleSheet.create({
     title:{
         textAlign: 'center',
         fontSize: 25,
+        paddingTop:15,
         paddingBottom: 10
     },
-    safeAreaView:{
-        flex:1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    contentArea:{
+        justifyContent:'center'
     },
     nameCategory:{
         color: Colors.APHASIA_WHITE,
         fontSize: 14,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
     loading:{
         backgroundColor: 'rgba(0,0,0,.3)',

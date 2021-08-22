@@ -50,7 +50,7 @@ export default createAppContainer(
       Therapist: DrawerNavigatorTherapist,
     },
     {
-      initialRouteName: 'AuthLoading',
+      initialRouteName: 'App',
     }
   ),
 );

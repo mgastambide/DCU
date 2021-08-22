@@ -8,12 +8,16 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator
 } from 'react-native';
-
-import Sound from 'react-native-sound';
+import Config from '../../constants/Config';
 import Colors from '../../constants/Colors';
 import {Icon} from 'react-native-elements';
 import HeaderNavigator from '../../navigation/HeaderNavigator';
+import CommonFeatures from '../../constants/CommonFeatures';
+import Sound from 'react-native-sound';
+let success_answer = '';
+let fail_answer = '';
 
 export default class WhoIsWhoExerciseScreen extends React.Component {
 
@@ -27,94 +31,16 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         super(properties);
 
         this.state = {
-            words: [
-                {
-                    id: 0,
-                    title: 'bicicleta',
-                    words: 'Hombre / Rubrio / Con Bigote / Con Lentes',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://image.freepik.com/foto-gratis/chico-rubio-gafas-solo-retrato_53876-60070.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://i.blogs.es/e8b5dc/color-de-ropa-para-cabello-rubio-18-/450_1000.jpg',
-                        }
-                    ],
-                    image_correct: 'https://image.freepik.com/foto-gratis/chico-rubio-gafas-solo-retrato_53876-60070.jpg'
-                },
-                {
-                    id: 1,
-                    title: 'paloma',
-                    words: 'Adulto / Sin Sombrero / Pelo Negro / Ojos Azules',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://piruliru.com/wp-content/uploads/2019/10/sombrero-nino-ballenas02.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://c8.alamy.com/compes/p96cn8/milan-junio-18-hombre-con-ojos-azules-y-pelo-negro-retrato-antes-de-giorgio-armani-fashion-show-la-semana-de-la-moda-de-milan-street-style-el-18-de-junio-de-2018-en-mi-p96cn8.jpg',
-                        }
-                    ],
-                    image_correct: 'https://c8.alamy.com/compes/p96cn8/milan-junio-18-hombre-con-ojos-azules-y-pelo-negro-retrato-antes-de-giorgio-armani-fashion-show-la-semana-de-la-moda-de-milan-street-style-el-18-de-junio-de-2018-en-mi-p96cn8.jpg'
-                },
-                {
-                    id: 2,
-                    title: 'perro',
-                    words: 'Mujer / Pelirroja / Camisa Blanca / Con Lentes',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://image.freepik.com/foto-gratis/mujer-negocios-pelirroja-gafas_151013-726.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://c8.alamy.com/compes/w9mcg8/retrato-de-una-joven-gordito-hombre-pelirroja-en-una-camisa-negra-que-se-enfrenta-a-la-camara-aislado-en-un-fondo-blanco-w9mcg8.jpg',
-                        }
-                    ],
-                    image_correct: 'https://image.freepik.com/foto-gratis/mujer-negocios-pelirroja-gafas_151013-726.jpg'
-                },
-                {
-                    id: 3,
-                    title: 'perro',
-                    words: 'Hombre / Asiatico / Con Traje / Pelo Con Canas',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://images.pexels.com/users/avatars/563038/rokibul-hasan-766.jpeg?w=256&h=256&fit=crop&auto=compress',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://ae01.alicdn.com/kf/HTB15bZqKpXXXXb7XXXXq6xXFXXXj/Hombre-Pelucas-Corto-Negro-Blanco-Hombres-de-Mediana-Edad-Pelo-Sint-tico-Falso-Transpirable-Gris-Viejo.jpg_Q90.jpg',
-                        }
-                    ],
-                    image_correct: 'https://ae01.alicdn.com/kf/HTB15bZqKpXXXXb7XXXXq6xXFXXXj/Hombre-Pelucas-Corto-Negro-Blanco-Hombres-de-Mediana-Edad-Pelo-Sint-tico-Falso-Transpirable-Gris-Viejo.jpg_Q90.jpg'
-                },
-                {
-                    id: 4,
-                    title: 'perro',
-                    words: 'Bebe / Durmiendo / Con Gorro / Con Mamadera',
-                    images: [
-                        {
-                            id: 0,
-                            image: 'https://previews.123rf.com/images/ferli/ferli1507/ferli150700623/42160996-retrato-de-cuerpo-entero-del-peque%C3%B1o-beb%C3%A9-adorable-acostado-en-el-piso.jpg',
-                        },
-                        {
-                            id: 1,
-                            image: 'https://http2.mlstatic.com/original-bebe-reborn-vinilo-cuerpo-completo-realista-D_Q_NP_897926-MLM27495406231_062018-F.webp',
-                        }
-                    ],
-                    image_correct: 'https://http2.mlstatic.com/original-bebe-reborn-vinilo-cuerpo-completo-realista-D_Q_NP_897926-MLM27495406231_062018-F.webp'
-                },
-            ],
+            images: [],
+            getWidth : '100%',
+            getHeight: '100%',
             selectedItem: {},
             selected: '',
-            images: [],
             border: Colors.APHASIA_GREY0,
             total_correct: 0,
             total_incorrect: 0,
+            indexExercise: 0,
+            loading: true
         };
     }
 
@@ -122,31 +48,69 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         this._isMounted = true;
         let total_correct = this.props.navigation.getParam('total_correct');
         let total_incorrect = this.props.navigation.getParam('total_incorrect');
-        let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
+        let indexExercise = this.props.navigation.getParam('indexExercise');
 
         (total_correct) && this.setState({total_correct});
         (total_incorrect) && this.setState({total_incorrect});
-        (selectedItem) && console.log(selectedItem);
-        (selectedItem) && this.setState({selectedItem, images: selectedItem.images});
 
+        Config.apiGet('who_is_who')
+        .then((Items) => {
+            let images = [];
+            let selectedItem = {};
+
+            if(indexExercise){
+                
+                if(indexExercise === Items.length){
+                    indexExercise = 0;
+                }
+
+                selectedItem = Items[indexExercise];
+                images = [
+                        {id: 0, image: Items[indexExercise].correct_image},
+                        {id: 1, image: Items[indexExercise].wrong_image},
+                    ];
+            }else{
+                indexExercise = 0;
+                selectedItem = Items[0];
+                images = [
+                    {id: 0, image: Items[0].correct_image},
+                    {id: 1, image: Items[0].wrong_image},
+                ];
+            }
+            images = CommonFeatures.shuffleArray(images);
+            this.setState({images, selectedItem, indexExercise, loading: false})
+            success_answer = new Sound(require('../../assets/sound/success_answer.mp3'))
+            fail_answer = new Sound(require('../../assets/sound/fail_answer.mp3'))
+        })
+        .catch(Config.apiCatchErrors.bind(this));
+
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
     }
-
+    
     componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
         this._isMounted = false;
     }
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
+    }
 
-    _headerComponent = () => <View style={{paddingTop:20, width: Dimensions.get('window').width - 20}}>
+    _headerComponent = () => <View style={{paddingTop:20, width: '100%'}}>
 
-        <Text style={{backgroundColor: Colors.APHASIA_GREY1, padding: 15, color: Colors.APHASIA_WHITE, textAlign: 'center',
-            borderRadius:8, marginHorizontal:5
-        }}>
-            Total correctas: {this.state.total_correct} / Total incorrectas: {this.state.total_incorrect}
-        </Text>
+        {/* <Text style={styles.total}>
+            Correctas: {this.state.total_correct} / Incorrectas: {this.state.total_incorrect}
+        </Text> */}
 
         {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
-                <Text style={{fontSize:18, fontWeight: 'bold', textAlign: 'center'}}>
+                <Text style={{fontSize:20, fontWeight: 'bold', textAlign: 'center'}}>
                     Seleccione la imagen correcta, según la siguiente descripción
                 </Text>
             </View>
@@ -167,8 +131,8 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         }
 
         <View style={[styles.speaker, {borderColor: this.state.border}]}>
-            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:16, textAlign: 'center'}}>
-                {this.state.selectedItem.words}
+            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:18, textAlign: 'center'}}>
+                {this.state.selectedItem.description}
             </Text>
         </View>
 
@@ -183,8 +147,8 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
             <Text style={styles.textButton}>Ayuda</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
-                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN}]}
+        <TouchableOpacity onPress={() => this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1})}
+                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN, marginHorizontal:15}]}
         >
             <Icon name={'step-forward'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
             <Text style={styles.textButton}>Siguiente</Text>
@@ -198,13 +162,15 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
     </View>
 
     clickItem(item){
-        if(this.state.selectedItem.image_correct === item.image){
+        if(this.state.selectedItem.correct_image === item.image){
+            success_answer.play();
             this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, total_correct: this.state.total_correct+1});
             setTimeout(() => {
-                    this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
+                    this.props.navigation.push('WhoIsWhoExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1});
                 }, 1000
             )
         }else{
+            fail_answer.play();
             this.setState({selected: 'bad', border: Colors.APHASIA_RED, total_incorrect: this.state.total_incorrect + 1})
             setTimeout(() => {
                     this.setState({selected: '', border: Colors.APHASIA_GREY0})
@@ -217,7 +183,7 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         let index = 0;
         let words = [...this.state.images]
         for (let i = 0; i < words.length; i++) {
-            if(words[i].image !== this.state.selectedItem.image_correct){
+            if(words[i].image !== this.state.selectedItem.correct_image){
                 index = words[i].id;
                 break;
             }
@@ -230,18 +196,23 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         return(
             <ImageBackground source={require('../../assets/images/background-app-white.jpg')} style={styles.containerImageBackground}>
                 <HeaderNavigator open={() => this.props.navigation.openDrawer()}/>
-                <View style={styles.container}>
-                    <FlatList
-                        ListHeaderComponent={this._headerComponent}
-                        data={this.state.images}
-                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)}
-                        />}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
-                        contentContainerStyle={styles.center}
-                        ListFooterComponent={this._footerComponent}
-                    />
-                </View>
+                {
+                    (this.state.loading)
+                    ? <ActivityIndicator animating={this.state.loading} color={Colors.APHASIA_GREY2} style={{marginVertical: 300}}/>
+                    :  
+                    <View style={styles.container}>
+                        <FlatList
+                            ListHeaderComponent={this._headerComponent}
+                            data={this.state.images}
+                            renderItem={({item, index}) => <Box item={item} callback={() => this.clickItem(item)} index={index}
+                            />}
+                            keyExtractor={item => item.id}
+                            numColumns={2}
+                            contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth}]}
+                            ListFooterComponent={this._footerComponent}
+                        />
+                    </View>
+                }
             </ImageBackground>
         );
     }
@@ -250,10 +221,10 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
 class Box extends React.Component {
     render() {
         return (
-            <TouchableOpacity style={[styles.box]}
+            <TouchableOpacity style={[styles.box, {marginRight: (this.props.index === 0) ? 15 : 0}]}
                               onPress={() => this.props.callback()}
             >
-                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
+                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} resizeMethod={'resize'} />
             </TouchableOpacity>
         )
     }
@@ -277,15 +248,15 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
         backgroundColor: Colors.APHASIA_BLUE,
-        minWidth: '30%'
+        width:'100%',
+        flex:1,
     },
     speaker:{
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
+        marginBottom: 20,
         paddingVertical: 15,
         paddingHorizontal: 20,
         backgroundColor: Colors.APHASIA_GREY0,
@@ -293,18 +264,18 @@ const styles = StyleSheet.create({
     },
     buttons:{
         flexDirection: 'row',
-        paddingHorizontal: 15,
-        paddingBottom: 10
+        paddingTop: 20
     },
     button:{
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: Colors.APHASIA_ORANGE,
         borderRadius:8,
-        margin: 8,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width:'100%',
+        flex:1
     },
     textButton:{
         padding: 10,
@@ -314,17 +285,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30
-    },
-    image:{
-        width:150,
-        height:150,
-        resizeMode: 'contain',
-        marginBottom: 5
+        paddingVertical:15,
     },
     imageIcon:{
-        width:150,
-        height:150,
+        width:160,
+        height:160,
         resizeMode: 'cover',
         borderRadius:8
     },
@@ -336,5 +301,16 @@ const styles = StyleSheet.create({
     nameCategory:{
         textTransform: 'capitalize',
         color: Colors.APHASIA_WHITE
+    },
+    contentArea:{
+        justifyContent:'center'
+    },
+    total:{
+        backgroundColor: Colors.APHASIA_GREY1,
+        padding: 15,
+        color: Colors.APHASIA_WHITE,
+        textAlign: 'center',
+        borderRadius:8,
+        fontSize: 20
     }
 });

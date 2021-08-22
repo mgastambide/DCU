@@ -6,20 +6,27 @@ import {Avatar, Icon} from "react-native-elements";
 import {NavigationActions} from "react-navigation";
 import AsyncStorage from '@react-native-community/async-storage';
 import { EventRegister } from 'react-native-event-listeners'
+import Sound from 'react-native-sound';
 
+let fail_answer = '';
 export default class DrawerScreen extends React.Component {
 
     state = {
         user: {},
         token:false,
-        avatarSource: null
+        avatarSource: null,
+        is_muted: 'false'
     };
 
     async load(){
 
-        const userToken = await AsyncStorage.getItem('@Token');
+        //const userToken = await AsyncStorage.getItem('@Token');
+        const is_muted = await AsyncStorage.getItem('@Is_muted');
+        if(is_muted){
+            this.setState({is_muted})
+        }
 
-        if(userToken) {
+        /* if(userToken) {
             Config.apiPostToken('me')
             .then((user) => {
                     this.setState({
@@ -28,7 +35,7 @@ export default class DrawerScreen extends React.Component {
                     });
             })
             .catch(Config.apiCatchErrors.bind(this));
-        }
+        } */
 
     }
 
@@ -39,6 +46,9 @@ export default class DrawerScreen extends React.Component {
         this.listener = EventRegister.addEventListener('updateProfile', () => {
             this.load();
         })
+
+        fail_answer = new Sound(require('../assets/sound/fail_answer.mp3'))
+        this.isMuted('false');
     }
 
     componentWillUnmount() {
@@ -53,7 +63,7 @@ export default class DrawerScreen extends React.Component {
         });
 
         switch (row) {
-            case 'Inicio': this.props.navigation.navigate('HomeApp'); break;
+            case 'Inicio': this.props.navigation.popToTop(); break;
             case 'Logros': this.props.navigation.navigate('Achievements'); break;
             case 'Perfil': this.props.navigation.navigate('MyProfile'); break;
             default: this.props.navigation.navigate('App');
@@ -72,6 +82,19 @@ export default class DrawerScreen extends React.Component {
         }
     }
 
+    async isMuted(is_muted){
+        this.setState({is_muted})
+        await AsyncStorage.setItem('@Is_muted', is_muted);
+        EventRegister.emit('updateProfile');
+        if(is_muted){
+            if(is_muted === 'true'){
+                fail_answer.setSystemVolume(0)
+            }else{
+                fail_answer.setSystemVolume(0.75)
+            }
+        }
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -83,17 +106,30 @@ export default class DrawerScreen extends React.Component {
                     />
 
                     <View style={styles.nameAndCompany}>
-                        <Text style={styles.name}>{this.state.token ? this.state.user.first_name : 'Guest'}</Text>
-                        <Text style={[styles.name, {fontWeight:'100'}]}>{this.state.token ? (this.state.user.role_id === 3) ? 'Estudiante' : 'Terapeuta/Tutor' : 'Invitado'}</Text>
+                        <Text style={styles.name}>{this.state.token ? this.state.user.first_name : 'Anomia App'}</Text>
+                        <Text style={[styles.name, {fontWeight:'100'}]}>{this.state.token ? (this.state.user.role_id === 3) ? 'Estudiante' : 'Terapeuta/Tutor' : 'Opciones'}</Text>
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.row} onPress={() => this.onPressRow('Inicio')}>
+        <TouchableOpacity
+            style={styles.row}
+            onPress={()=> this.isMuted((this.state.is_muted === 'false') ? 'true' : 'false')}
+        >
+            <Icon style={styles.icon} color={Colors.APHASIA_GREY3}
+                name={(this.state.is_muted === 'true') ? 'volume-mute' : 'volume-up'}
+                type='font-awesome-5'
+            />
+            <Text style={[styles.rowText, {color: Colors.APHASIA_GREY3}]}>
+                {(this.state.is_muted === 'true') ? 'Sonido desactivado' : 'Sonido Activado'}
+            </Text>
+        </TouchableOpacity>
+
+                {/* <TouchableOpacity style={styles.row} onPress={() => this.onPressRow('Inicio')}>
                     <Icon name='home' type={'font-awesome'} color={Colors.APHASIA_GREY3} style={20}/>
                     <Text style={[styles.rowText, {color: Colors.APHASIA_GREY3}]}>Inicio</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                {
+                {/* {
                     (this.state.user.role_id === 3)
                     ?
                     <TouchableOpacity style={styles.row} onPress={() => this.onPressRow('Logros')}>
@@ -110,7 +146,7 @@ export default class DrawerScreen extends React.Component {
                 <TouchableOpacity style={styles.row} onPress={() => this.onPressRow('Perfil')}>
                     <Icon name='user' type={'font-awesome'} color={Colors.APHASIA_GREY3} style={20}/>
                     <Text style={[styles.rowText, {color: Colors.APHASIA_GREY3}]}>Mi Perfil</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 {
                     this.state.token &&

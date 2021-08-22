@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    BackHandler, Dimensions,
+    Dimensions,
     FlatList,
     Image,
     ImageBackground,
@@ -8,12 +8,18 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator
 } from 'react-native';
 
-import Sound from 'react-native-sound';
 import Colors from '../../constants/Colors';
+import Config from '../../constants/Config';
 import {Icon} from 'react-native-elements';
 import HeaderNavigator from '../../navigation/HeaderNavigator';
+//import Words from '../../assets/multimedia_content/content_listening'
+import CommonFeatures from '../../constants/CommonFeatures';
+import Sound from 'react-native-sound';
+let success_answer = '';
+let fail_answer = '';
 
 export default class ToSelectExerciseScreen extends React.Component {
 
@@ -29,34 +35,17 @@ export default class ToSelectExerciseScreen extends React.Component {
         this.state = {
             sound: {},
             isLoop: false,
-            words: [
-                {
-                    id: 0,
-                    title: 'Bicicleta',
-                    image: 'https://cdn1.iconfinder.com/data/icons/bikes-on-circle/256/circle_bike-cruiser-flyer-mens-circle-512.png'
-                },
-                {
-                    id: 1,
-                    title: 'Paloma',
-                    image: 'https://cdn.pixabay.com/photo/2012/04/12/12/36/pigeon-29841__340.png'
-                },
-                {
-                    id: 2,
-                    title: 'Perro',
-                    image: 'https://seeklogo.com/images/B/black-dog-circle-logo-7032FEC424-seeklogo.com.png'
-                },
-                {
-                    id: 3,
-                    title: 'Automovil',
-                    image: 'https://1.bp.blogspot.com/-wh9z6x6pxyA/X3_vjw7rUOI/AAAAAAAA0sM/dicZ9x1vItAmV1_0nTfU28JvJPd2-sbVACLcBGAsYHQ/s2048/r8-01.png',
-                }
-            ],
+            words: [],
+            getWidth : '100%',
+            getHeight: '100%',
             selectedItem: {},
             selected: '',
             border: Colors.APHASIA_GREY0,
             total_correct: 0,
             total_incorrect: 0,
-            idExercise: 0
+            idExercise: 0,
+            indexExercise: 0,
+            loading: true
         };
     }
 
@@ -64,25 +53,93 @@ export default class ToSelectExerciseScreen extends React.Component {
         this._isMounted = true;
         let total_correct = this.props.navigation.getParam('total_correct');
         let total_incorrect = this.props.navigation.getParam('total_incorrect');
-        let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
-
+        let indexExercise = this.props.navigation.getParam('indexExercise');
         (total_correct) && this.setState({total_correct});
         (total_incorrect) && this.setState({total_incorrect});
-        this.setState({selectedItem})
 
+        Config.apiGet('exercises')
+        .then((Words) => {
+            /* let words = [];
+            let max_number = Words.length;
+            let number_one = CommonFeatures.getRandomNumer(max_number, [indexExercise]);
+            let number_two = CommonFeatures.getRandomNumer(max_number, [indexExercise, number_one]);
+            let number_three = CommonFeatures.getRandomNumer(max_number, [indexExercise, number_one, number_two]);
+            let correct_element = {}; */
+            let words = [];
+            let selectedItem = {};
+
+            if(indexExercise){
+                if(indexExercise === Words.length){
+                    indexExercise = 0;
+                    //this.setState({indexExercise: 0})
+                }else{
+                    //this.setState({indexExercise})
+                }
+                selectedItem = Words[indexExercise];
+                words = [{id: 0, word: Words[indexExercise].word, image: Words[indexExercise].image},
+                        {id: 1, word: Words[indexExercise].prox_sem, image: Words[indexExercise].image_prox_sem},
+                        {id: 2, word: Words[indexExercise].distant_sem, image: Words[indexExercise].image_distant_sem},
+                        {id: 3, word: Words[indexExercise].fonol, image: Words[indexExercise].image_fonol}
+                    ];
+                /* let first_random = Words[number_one]
+                let second_random = Words[number_two]
+                let third_random = Words[number_three]
+                correct_element = Words[indexExercise]
+                words.push(first_random, second_random, correct_element);
+                */
+            }else{
+                indexExercise = 0;
+                selectedItem = Words[0];
+                words = [{
+                    id: 0, word: Words[0].word, image: Words[0].image},
+                    {id: 1, word: Words[0].prox_sem, image: Words[0].image_prox_sem},
+                    {id: 2, word: Words[0].distant_sem, image: Words[0].image_distant_sem},
+                    {id: 3, word: Words[0].fonol, image: Words[0].image_fonol}
+                ];
+                /* words = Words.slice(0,4);
+                words = CommonFeatures.shuffleArray(words);
+                correct_element = Words[0] */
+            }
+            words = CommonFeatures.shuffleArray(words);
+            this.setState({words, selectedItem, indexExercise, loading: false})
+
+            //Search item
+            /* let i;
+            let selectedItem = {};
+            for (i = 0; i < words.length; i++) {
+                if(words[i].id === correct_element.id){
+                    selectedItem = words[i]
+                }
+            } */
+
+            //this.setState({selectedItem, soundSelected: selectedItem.sound})
+            success_answer = new Sound(require('../../assets/sound/success_answer.mp3'))
+            fail_answer = new Sound(require('../../assets/sound/fail_answer.mp3'))
+        })
+        .catch(Config.apiCatchErrors.bind(this));
+
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
     }
-
+    
     componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
         this._isMounted = false;
     }
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
+    }
 
-    _headerComponent = () => <View style={{paddingTop:20, width: Dimensions.get('window').width - 20}}>
+    _headerComponent = () => <View style={{paddingTop:20, width: '100%'}}>
 
-        <Text style={{backgroundColor: Colors.APHASIA_GREY1, padding: 15, color: Colors.APHASIA_WHITE, textAlign: 'center',
-            borderRadius:8, marginHorizontal:5
-        }}>
-            Total correctas: {this.state.total_correct} / Total incorrectas: {this.state.total_incorrect}
-        </Text>
+        {/* <Text style={styles.total}>
+            Ccorrectas: {this.state.total_correct} / Incorrectas: {this.state.total_incorrect}
+        </Text> */}
 
         {
             (this.state.selected === '') &&
@@ -96,20 +153,20 @@ export default class ToSelectExerciseScreen extends React.Component {
         {
             (this.state.selected === 'correct') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Muy bien!</Text>
+                <Text style={{color: this.state.border, fontSize:18, fontWeight: 'bold'}}>Muy bien!</Text>
             </View>
         }
 
         {
             (this.state.selected === 'bad') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
+                <Text style={{color: this.state.border, fontSize:18, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
             </View>
         }
 
         <View style={[styles.speaker, {borderColor: this.state.border}]}>
-            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:25, textAlign: 'center'}}>
-                { this.state.selectedItem.title }
+            <Text style={{color: (this.state.selected === '') ? 'white' : this.state.border, fontSize:25, textAlign: 'center', textTransform: 'capitalize'}}>
+                { this.state.selectedItem.word }
             </Text>
         </View>
 
@@ -124,8 +181,8 @@ export default class ToSelectExerciseScreen extends React.Component {
             <Text style={styles.textButton}>Ayuda</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.push('ToSelectExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
-                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN}]}
+        <TouchableOpacity onPress={() => this.props.navigation.push('ToSelectExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1})}
+                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN, marginHorizontal:15}]}
         >
             <Icon name={'step-forward'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
             <Text style={styles.textButton}>Siguiente</Text>
@@ -139,13 +196,15 @@ export default class ToSelectExerciseScreen extends React.Component {
     </View>
 
     clickItem(item){
-        if(this.state.selectedItem.title === item.title){
+        if(this.state.selectedItem.word === item.word){
+            success_answer.play();
             this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, total_correct: this.state.total_correct+1});
             setTimeout(() => {
-                    this.props.navigation.push('ToSelectExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
+                    this.props.navigation.push('ToSelectExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1});
                 }, 1000
             )
         }else{
+            fail_answer.play();
             this.setState({selected: 'bad', border: Colors.APHASIA_RED, total_incorrect: this.state.total_incorrect + 1})
             setTimeout(() => {
                     this.setState({selected: '', border: Colors.APHASIA_GREY0})
@@ -158,7 +217,7 @@ export default class ToSelectExerciseScreen extends React.Component {
         let index = 0;
         let words = [...this.state.words]
         for (let i = 0; i < words.length; i++) {
-            if(words[i].title !== this.state.selectedItem.title){
+            if(words[i].word !== this.state.selectedItem.word){
                 index = words[i].id;
                 break;
             }
@@ -171,18 +230,23 @@ export default class ToSelectExerciseScreen extends React.Component {
         return(
             <ImageBackground source={require('../../assets/images/background-app-white.jpg')} style={styles.containerImageBackground}>
                 <HeaderNavigator open={() => this.props.navigation.openDrawer()}/>
-                <View style={styles.container}>
-                    <FlatList
-                        ListHeaderComponent={this._headerComponent}
-                        data={this.state.words}
-                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)}
-                        />}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
-                        contentContainerStyle={styles.center}
-                        ListFooterComponent={this._footerComponent}
-                    />
-                </View>
+                {
+                    (this.state.loading)
+                    ? <ActivityIndicator animating={this.state.loading} color={Colors.APHASIA_GREY2} style={{marginVertical: 300}}/>
+                    :  
+                    <View style={styles.container}>
+                        <FlatList
+                            ListHeaderComponent={this._headerComponent}
+                            data={this.state.words}
+                            renderItem={({item, index}) => <Box item={item} callback={() => this.clickItem(item)} index={index}
+                            />}
+                            keyExtractor={item => item.id}
+                            numColumns={2}
+                            contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth}]}
+                            ListFooterComponent={this._footerComponent}
+                        />
+                    </View>
+                }
             </ImageBackground>
         );
     }
@@ -192,8 +256,10 @@ class Box extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity style={[styles.box]} onPress={() => this.props.callback()} >
-                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
+            <TouchableOpacity style={[styles.box, {marginRight: (this.props.index === 0 || this.props.index === 2) ? 15 : 0}]}
+                onPress={() => this.props.callback()}
+            >
+                <Image source={{uri: this.props.item.image}} style={styles.imageIcon} resizeMethod={'resize'} />
             </TouchableOpacity>
         )
     }
@@ -217,17 +283,17 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+        marginBottom: 10,
+        padding: 5,
         backgroundColor: Colors.APHASIA_BLUE,
-        minWidth: '25%'
+        width:'100%',
+        flex:1
     },
     speaker:{
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
+        marginBottom: 10,
         paddingVertical: 15,
         paddingHorizontal: 20,
         backgroundColor: Colors.APHASIA_GREY0,
@@ -235,18 +301,18 @@ const styles = StyleSheet.create({
     },
     buttons:{
         flexDirection: 'row',
-        paddingHorizontal: 15,
-        paddingBottom: 10
+        paddingVertical: 10
     },
     button:{
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: Colors.APHASIA_ORANGE,
         borderRadius:8,
-        margin: 8,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width:'100%',
+        flex:1
     },
     textButton:{
         padding: 10,
@@ -256,17 +322,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30
-    },
-    image:{
-        width:150,
-        height:150,
-        resizeMode: 'contain',
-        marginBottom: 5
+        paddingVertical:15
     },
     imageIcon:{
-        width:80,
-        height:80,
+        width:110,
+        height:110,
         resizeMode: 'contain',
     },
     center:{
@@ -277,5 +337,16 @@ const styles = StyleSheet.create({
     nameCategory:{
         textTransform: 'capitalize',
         color: Colors.APHASIA_WHITE
+    },
+    contentArea:{
+        justifyContent:'center'
+    },
+    total:{
+        backgroundColor: Colors.APHASIA_GREY1,
+        padding: 15,
+        color: Colors.APHASIA_WHITE,
+        textAlign: 'center',
+        borderRadius:8,
+        fontSize: 20
     }
 });

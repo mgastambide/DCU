@@ -21,16 +21,18 @@ export default class AuthLoadingScreen extends React.Component {
         if(userToken){
             Config.apiPostToken('me')
             .then((user) => {
-                    if(user.role_id === 3){
-                        this.props.navigation.navigate('App');
-                    }else{
-                        this.props.navigation.navigate('Therapist');
-                    }
+                this.props.navigation.navigate('App')
+                if(user.role_id === 3){
+                    this.props.navigation.navigate('App');
+                }else{
+                    this.props.navigation.navigate('Therapist');
+                }
             })
             .catch(Config.apiCatchErrors.bind(this));
            
         }else {
-            this.props.navigation.navigate('Auth');
+            this.props.navigation.navigate('App');
+            // this.props.navigation.navigate('Auth');
         }
     };
 

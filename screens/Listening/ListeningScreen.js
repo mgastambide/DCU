@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
     View, Text, ImageBackground, ActivityIndicator, StyleSheet,
-    FlatList, Image, TouchableOpacity,
+    FlatList, Dimensions, TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Colors from '../../constants/Colors';
@@ -16,6 +16,8 @@ export default class ListeningScreen extends React.Component {
 
     state={
         loading: true,
+        getWidth : '100%',
+        getHeight: '100%',
         categories:[
             {
                 id: '0',
@@ -33,14 +35,6 @@ export default class ListeningScreen extends React.Component {
                 color: Colors.APHASIA_YELLOW,
                 nav: 'Listening'
             },
-            {
-                id: '2',
-                title: 'Escuchar y elegir la letra',
-                icon: require('../../assets/images/Icons/boy_spelling_one.png'),
-                iconActive: require('../../assets/images/Icons/boy_spelling_two.png'),
-                color: Colors.APHASIA_BLUE,
-                nav: 'Listening'
-            },
         ]
     }
 
@@ -49,9 +43,23 @@ export default class ListeningScreen extends React.Component {
                 this.setState({loading: false})
             }, 2000
         )
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
+    }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
+    }
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
     }
 
-    _headerComponent = () => <Text style={styles.title}>Escuchando</Text>;
+    _headerComponent = () => <Text style={styles.title}>Emparejar Sonido</Text>;
 
     // Render any loading content that you like here
     render() {
@@ -67,11 +75,11 @@ export default class ListeningScreen extends React.Component {
                                 ListHeaderComponent={this._headerComponent}
                                 data={this.state.categories}
                                 renderItem={({item}) => <Category category={item}
-                                                                  redirect={(nav) => this.props.navigation.navigate('ListeningExercise', {idExercise: item.id})}
+                                                                  redirect={(nav) => this.props.navigation.navigate('ListeningExercise', {idExercise: item.id, is_muted:0})}
                                 />}
                                 keyExtractor={item => item.id}
                                 numColumns={2}
-                                contentContainerStyle={styles.center}
+                                contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth}]}
                             />
                         </View>
                 }
@@ -90,7 +98,7 @@ class Category extends React.Component {
         setTimeout(() => {
                 this.setState({active: false})
                 this.props.redirect();
-            }, 1500
+            }, 1000
         )
     }
 
@@ -141,6 +149,8 @@ const styles = StyleSheet.create({
         margin: 10,
         paddingVertical: 15,
         paddingHorizontal: 20,
+        width: '100%',
+        flex:1
     },
     center:{
         flex:1,
@@ -151,11 +161,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 25,
         paddingBottom: 10
-    },
-    safeAreaView:{
-        flex:1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     nameCategory:{
         color: Colors.APHASIA_WHITE,
@@ -178,5 +183,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 40
-    }
+    },
+    contentArea:{
+        justifyContent:'center'
+    },
 });

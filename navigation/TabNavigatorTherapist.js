@@ -49,7 +49,7 @@ const MyAchievementsStack = createStackNavigator({
 });
 
 MyAchievementsStack.navigationOptions = {
-    tabBarLabel: 'Alumnos',
+    tabBarLabel: 'Usuarios',
     tabBarIcon: ({ focused }) => {
         return (focused)
             ? <Icon name='users' type={'font-awesome'} color={Colors.APHASIA_BLUE} size={20}/>
@@ -71,6 +71,7 @@ export default createBottomTabNavigator({
             style: {
                 backgroundColor: Colors.APHASIA_WHITE,
             },
-        }
+        },
+        initialRouteName: 'Achievements'
     },
 );

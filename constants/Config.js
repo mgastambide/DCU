@@ -1,7 +1,8 @@
 import React from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const API_URL = 'http://iupi.ci.axlot.com/api/';
+//const API_URL = 'https://iupi.ci.axlot.com/api/';
+const API_URL = 'https://607b101abd56a60017ba359e.mockapi.io/api/';
 
 export default {
 

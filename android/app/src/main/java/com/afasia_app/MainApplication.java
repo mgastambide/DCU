@@ -9,6 +9,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
+import java.security.Security;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+      Security.insertProviderAt(new org.conscrypt.OpenSSLProvider(), 1);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 

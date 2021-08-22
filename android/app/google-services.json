@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "393246001509",
+    "project_id": "anomia-app",
+    "storage_bucket": "anomia-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393246001509:android:d5c02bef1cee862118798c",
+        "android_client_info": {
+          "package_name": "com.afasia_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393246001509-gcnnh9g81mptoe01fdv1lhl5pp2d9ch7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw_EEVSudyLgdMQWATLkw1kvE1SCxRZ3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393246001509-gcnnh9g81mptoe01fdv1lhl5pp2d9ch7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

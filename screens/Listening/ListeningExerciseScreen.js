@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    BackHandler, Dimensions,
+    Dimensions,
     FlatList,
     Image,
     ImageBackground,
@@ -8,12 +8,23 @@ import {
     Text,
     TouchableOpacity,
     View,
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 
 import Sound from 'react-native-sound';
 import Colors from '../../constants/Colors';
+import Config from '../../constants/Config';
 import {Icon} from 'react-native-elements';
 import HeaderNavigator from '../../navigation/HeaderNavigator';
+//import Words from '../../assets/multimedia_content/content_general'
+import CommonFeatures from '../../constants/CommonFeatures';
+import LottieView from 'lottie-react-native';
+import { EventRegister } from 'react-native-event-listeners'
+
+let whoosh = '';
+let success_answer = '';
+let fail_answer = '';
 
 export default class ListeningExerciseScreen extends React.Component {
 
@@ -29,49 +40,22 @@ export default class ListeningExerciseScreen extends React.Component {
         this.state = {
             sound: {},
             isLoop: false,
-            words: [
-                {
-                    id: 0,
-                    title: 'bicicleta',
-                    sound: '../../assets/sounds/bicicleta.mp3',
-                    image: 'https://cdn1.iconfinder.com/data/icons/bikes-on-circle/256/circle_bike-cruiser-flyer-mens-circle-512.png'
-                },
-                {
-                    id: 1,
-                    title: 'paloma',
-                    sound: '../../assets/sounds/paloma.mp3',
-                    image: 'https://cdn.pixabay.com/photo/2012/04/12/12/36/pigeon-29841__340.png'
-                },
-                {
-                    id: 2,
-                    title: 'perro',
-                    sound: '../../assets/sounds/perro.mp3',
-                    image: 'https://seeklogo.com/images/B/black-dog-circle-logo-7032FEC424-seeklogo.com.png'
-                }
-            ],
-            letters: [
-                {
-                    id: 0,
-                    title: 'm',
-                    sound: '../../assets/sounds/m.mp3',
-                },
-                {
-                    id: 1,
-                    title: 'e',
-                    sound: '../../assets/sounds/e.mp3',
-                },
-                {
-                    id: 2,
-                    title: 'g',
-                    sound: '../../assets/sounds/g.mp3',
-                }
-            ],
+            getWidth : '100%',
+            getHeight: '100%',
+            soundSelected: '',
+            getSizeImage: 70,
+            words: [],
             selectedItem: {},
             selected: '',
             border: Colors.APHASIA_GREY0,
             total_correct: 0,
             total_incorrect: 0,
-            idExercise: 0
+            idExercise: 0,
+            indexExercise: 0,
+            press_sound: false,
+            loading: true,
+            speed: 0,
+            progress: 0,
         };
     }
 
@@ -79,96 +63,124 @@ export default class ListeningExerciseScreen extends React.Component {
         this._isMounted = true;
         let total_correct = this.props.navigation.getParam('total_correct');
         let total_incorrect = this.props.navigation.getParam('total_incorrect');
+        if(total_correct){this.setState({total_correct});}
+        if(total_incorrect){this.setState({total_incorrect});}
+
+        this.load();
+
+        this.listener = EventRegister.addEventListener('updateListening', () => {
+            this.load();
+        })
+    }
+
+    async load(){
         let idExercise = this.props.navigation.getParam('idExercise');
+        let indexExercise = await this.props.navigation.getParam('indexExercise');
+        if(idExercise){this.setState({idExercise});}
 
-        let selectedItem = this.state.words[Math.floor(Math.random()*this.state.words.length)];
-        if(idExercise === '2'){
-            selectedItem = this.state.letters[Math.floor(Math.random()*this.state.letters.length)];
-            this.setState({words: this.state.letters})
-        }
-
-        (total_correct) && this.setState({total_correct});
-        (total_incorrect) && this.setState({total_incorrect});
-        (idExercise) && this.setState({idExercise});
+        let url = 'sound_word';
+        if(idExercise && idExercise === '0'){url = 'sound_word';}
+        if(idExercise && idExercise === '1'){url = 'exercises';}
         
-        this.setState({selectedItem})
-        this.chargeSound(selectedItem.sound, idExercise);
+        Config.apiGet(url)
+        .then((Words) => {
+            /* let words = [];
+            let max_number = Words.length;
+            let number_one = CommonFeatures.getRandomNumer(max_number, [indexExercise]);
+            let number_two = CommonFeatures.getRandomNumer(max_number, [indexExercise, number_one]);
+            let number_three = CommonFeatures.getRandomNumer(max_number, [indexExercise, number_one, number_two]);
+            let correct_element = {}; */
+            let words = [];
+            let selectedItem = {};
 
+            if(indexExercise){
+                if(indexExercise === Words.length){
+                    indexExercise = 0;
+                    //this.setState({indexExercise: 0})
+                }else{
+                    //this.setState({indexExercise})
+                }
+                selectedItem = Words[indexExercise];
+                words = [{id: 0, word: Words[indexExercise].word, image: Words[indexExercise].image},
+                        {id: 1, word: Words[indexExercise].prox_sem, image: Words[indexExercise].image_prox_sem},
+                        {id: 2, word: Words[indexExercise].distant_sem, image: Words[indexExercise].image_distant_sem},
+                        {id: 3, word: Words[indexExercise].fonol, image: Words[indexExercise].image_fonol}
+                    ];
+                /* let first_random = Words[number_one]
+                let second_random = Words[number_two]
+                let third_random = Words[number_three]
+                correct_element = Words[indexExercise]
+                words.push(first_random, second_random, correct_element);
+                */
+            }else{
+                indexExercise = 0;
+                selectedItem = Words[0];
+                words = [{
+                    id: 0, word: Words[0].word, image: Words[0].image},
+                    {id: 1, word: Words[0].prox_sem, image: Words[0].image_prox_sem},
+                    {id: 2, word: Words[0].distant_sem, image: Words[0].image_distant_sem},
+                    {id: 3, word: Words[0].fonol, image: Words[0].image_fonol}
+                ];
+                /* words = Words.slice(0,4);
+                words = CommonFeatures.shuffleArray(words);
+                correct_element = Words[0] */
+            }
+            words = CommonFeatures.shuffleArray(words);
+            this.setState({words, selectedItem, indexExercise, loading: false})
+
+            //Search item
+            /* let i;
+            let selectedItem = {};
+            for (i = 0; i < words.length; i++) {
+                if(words[i].id === correct_element.id){
+                    selectedItem = words[i]
+                }
+            } */
+
+            //this.setState({selectedItem, soundSelected: selectedItem.sound})
+            let sound = 'https://marilakpropiedades.com.ar/wp-content/themes/Theme Marilak/sounds/'+selectedItem.sound;
+            whoosh = new Sound(sound, Sound.MAIN_BUNDLE, (error) => {
+                if (error) {
+                    Alert.alert('No se pudo cargar el sonido', error+'. Por favor, cierre y vuelva a abrir la aplicación. Gracias!');
+                    return;
+                }
+            });
+            success_answer = new Sound(require('../../assets/sound/success_answer.mp3'))
+            fail_answer = new Sound(require('../../assets/sound/fail_answer.mp3'))
+        })
+        .catch(Config.apiCatchErrors.bind(this));
+        
+        this.dimensionsScreen();
+
+        Dimensions.addEventListener('change', this.dimensionsScreen)
     }
-
-    chargeSound(soundSelected, idExercise){
-
-        Sound.setCategory('Playback', true); // true = mixWithOthers
-
-        const bike = new Sound(require('../../assets/sounds/bicicleta.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const dog = new Sound(require('../../assets/sounds/perro.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const bird = new Sound(require('../../assets/sounds/paloma.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_m = new Sound(require('../../assets/sounds/m.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_e = new Sound(require('../../assets/sounds/e.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        const letter_g = new Sound(require('../../assets/sounds/g.mp3'), '', error => {
-            if (error) {
-                console.log('error sound', error.message);
-            }
-        });
-
-        let itemSelected = '';
-        switch (soundSelected){
-            case '../../assets/sounds/bicicleta.mp3':
-                itemSelected = bike;
-                break;
-            case '../../assets/sounds/perro.mp3':
-                itemSelected = dog;
-                break;
-            case '../../assets/sounds/m.mp3':
-                itemSelected = letter_m;
-                break;
-            case '../../assets/sounds/e.mp3':
-                itemSelected = letter_e;
-                break;
-            case '../../assets/sounds/g.mp3':
-                itemSelected = letter_g;
-                break;
-            default:
-                itemSelected = bird;
-                break;
-        }
-
-        this.setState({ sound: itemSelected });
-
-    }
-
+    
     componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.dimensionsScreen);
         this._isMounted = false;
     }
-
+    
+    dimensionsScreen = () => {
+        this.setState({
+            getWidth: Dimensions.get('window').width - 30,
+            getHeight: Dimensions.get('window').height - 150
+        });
+    }
+    
     _play = () => {
-        if(this.state.sound !== undefined){
-            this.state.sound.play();
+        if(this.state.speed === 0){
+            // Play the sound with an onEnd callback
+            this.setState({press_sound: true, speed: 1, progress: 1});
+            whoosh.play((success) => {
+                if (success) {
+                    this.setState({speed: 0, press_sound: false, progress: 0})
+                } else {
+                    Alert.alert('Anomia App Error','La reproducción falló debido a errores de decodificación de audio. Por favor, cierre y vuelva a abrir la aplicación. Gracias!');
+                }
+            });
+        }else{
+            this.setState({speed: 0, press_sound: false})
+            whoosh.pause();
         }
     };
 
@@ -178,18 +190,16 @@ export default class ListeningExerciseScreen extends React.Component {
         }
     };
 
-    _headerComponent = () => <View style={{paddingTop:20, width: Dimensions.get('window').width - 20}}>
+    _headerComponent = () => <View style={{paddingTop:20, width: '100%'}}>
 
-        <Text style={{backgroundColor: Colors.APHASIA_GREY1, padding: 15, color: Colors.APHASIA_WHITE, textAlign: 'center',
-            borderRadius:8, marginHorizontal:5
-        }}>
-            Total correctas: {this.state.total_correct} / Total incorrectas: {this.state.total_incorrect}
-        </Text>
+        {/* <Text style={styles.total}>
+            Correctas: {this.state.total_correct} / Incorrectas: {this.state.total_incorrect}
+        </Text> */}
 
         {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
-                <Text style={{fontSize:18, fontWeight: 'bold'}}>
+                <Text style={{fontSize:20, fontWeight: 'bold'}}>
                     Presiona abajo para oir la palabra
                 </Text>
             </View>
@@ -198,22 +208,32 @@ export default class ListeningExerciseScreen extends React.Component {
         {
             (this.state.selected === 'correct') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Muy bien!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Muy bien!</Text>
             </View>
         }
 
         {
             (this.state.selected === 'bad') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
             </View>
         }
 
         <TouchableOpacity onPress={() => this._play()} activeOpacity={1}
                           style={[styles.speaker, {borderColor: this.state.border}]}
         >
-            <Icon name='volume-up' type={'font-awesome'}
-                  color={(this.state.selected === '') ? Colors.APHASIA_WHITE : this.state.border} size={50}
+            {/* <Icon name={(!this.state.press_sound) ? 'volume-down' : 'volume-up'} type={'font-awesome'}
+                  color={(this.state.selected === '') ? Colors.APHASIA_WHITE : this.state.border} size={60}
+            /> */}
+            <LottieView
+                ref={animation => {
+                this.animation = animation;
+                }}
+                speed={this.state.speed}
+                source={require('../../assets/json/sound_animation.json')}
+                style={{width: '100%'}}
+                progress={this.state.progress}
+                autoPlay
             />
         </TouchableOpacity>
 
@@ -228,8 +248,8 @@ export default class ListeningExerciseScreen extends React.Component {
             <Text style={styles.textButton}>Ayuda</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.push('ListeningExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise})}
-                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN}]}
+        <TouchableOpacity onPress={() => this.props.navigation.push('ListeningExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise, indexExercise: this.state.indexExercise+1})}
+                          style={[styles.button, {backgroundColor: Colors.APHASIA_LIGHT_GREEN, marginHorizontal: 10}]}
         >
             <Icon name={'step-forward'} type={'font-awesome'} size={20} color={Colors.APHASIA_WHITE} />
             <Text style={styles.textButton}>Siguiente</Text>
@@ -243,13 +263,23 @@ export default class ListeningExerciseScreen extends React.Component {
     </View>
 
     clickItem(item){
-        if(this.state.selectedItem.title === item.title){
-            this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, total_correct: this.state.total_correct+1});
+
+        //if(this.state.selectedItem.title === item.title){
+        if(this.state.selectedItem.word === item.word){
+            whoosh.stop();
+            success_answer.play();
+            this.setState({selected: 'correct', border: Colors.APHASIA_LIGHT_GREEN, speed:0, progress:0});
             setTimeout(() => {
-                    this.props.navigation.push('ListeningExercise', {total_correct: this.state.total_correct, total_incorrect: this.state.total_incorrect, idExercise: this.state.idExercise});
+                    this.props.navigation.push('ListeningExercise', {
+                        total_correct: this.state.total_correct+1,
+                        total_incorrect: this.state.total_incorrect,
+                        idExercise: this.state.idExercise,
+                        indexExercise: this.state.indexExercise+1,
+                    });
                 }, 1000
             )
         }else{
+            fail_answer.play();
             this.setState({selected: 'bad', border: Colors.APHASIA_RED, total_incorrect: this.state.total_incorrect + 1})
             setTimeout(() => {
                     this.setState({selected: '', border: Colors.APHASIA_GREY0})
@@ -262,7 +292,7 @@ export default class ListeningExerciseScreen extends React.Component {
         let index = 0;
         let words = [...this.state.words]
         for (let i = 0; i < words.length; i++) {
-            if(words[i].title !== this.state.selectedItem.title){
+            if(words[i].word !== this.state.selectedItem.word){
                 index = words[i].id;
                 break;
             }
@@ -275,18 +305,24 @@ export default class ListeningExerciseScreen extends React.Component {
         return(
             <ImageBackground source={require('../../assets/images/background-app-white.jpg')} style={styles.containerImageBackground}>
                 <HeaderNavigator open={() => this.props.navigation.openDrawer()}/>
-                <View style={styles.container}>
-                    <FlatList
-                        ListHeaderComponent={this._headerComponent}
-                        data={this.state.words}
-                        renderItem={({item}) => <Box item={item} callback={() => this.clickItem(item)} idExercise={this.state.idExercise}
-                        />}
-                        keyExtractor={item => item.id}
-                        numColumns={3}
-                        contentContainerStyle={styles.center}
-                        ListFooterComponent={this._footerComponent}
-                    />
-                </View>
+                {
+                    (this.state.loading)
+                    ? <ActivityIndicator animating={this.state.loading} color={Colors.APHASIA_GREY2} style={{marginVertical: 300}}/>
+                    :  
+                    <View style={styles.container}>
+                        <FlatList
+                            ListHeaderComponent={this._headerComponent}
+                            data={this.state.words}
+                            renderItem={({item, index}) => <Box item={item} callback={() => this.clickItem(item)}
+                                        idExercise={this.state.idExercise} index={index}
+                            />}
+                            keyExtractor={item => item.id}
+                            numColumns={2}
+                            contentContainerStyle={[styles.contentArea, {minHeight: this.state.getHeight, width: this.state.getWidth}]}
+                            ListFooterComponent={this._footerComponent}
+                        />
+                    </View>
+                }
             </ImageBackground>
         );
     }
@@ -308,19 +344,19 @@ class Box extends React.Component {
 
     render() {
         return (
-            <TouchableOpacity style={[styles.box, {paddingHorizontal: (this.props.idExercise === '1') ? 10 : 20}]}
+            <TouchableOpacity style={[styles.box, {marginLeft: (this.props.index === 1 || this.props.index === 3) ? 8 : 0}]}
                               onPress={this.activeIcon.bind(this)}
             >
                 {
                     (this.props.idExercise === '1')
                     ?
                     <React.Fragment>
-                        <Image source={{uri: this.props.item.image}} style={styles.imageIcon} />
+                        <Image source={{uri: this.props.item.image}} style={[styles.imageIcon]} resizeMethod='resize'/>
                     </React.Fragment>
                     :
                     <React.Fragment>
                         <Text style={styles.nameCategory}>
-                            {this.props.item.title}
+                            {this.props.item.word}
                         </Text>
                     </React.Fragment>
                 }
@@ -347,36 +383,36 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+        marginVertical: 5,
+        padding: 10,
         backgroundColor: Colors.APHASIA_BLUE,
-        minWidth: '25%'
+        width: '100%',
+        flex:1
     },
     speaker:{
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 10,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        backgroundColor: Colors.APHASIA_GREY0,
+        paddingVertical: 0,
+        paddingHorizontal: 5,
+        marginBottom:5,
+        backgroundColor: Colors.APHASIA_GREY_LIGHT,
         borderWidth: 3
     },
     buttons:{
         flexDirection: 'row',
-        paddingHorizontal: 15,
-        paddingBottom: 10
+        paddingVertical: 10,
     },
     button:{
         paddingVertical: 5,
         paddingHorizontal: 10,
         backgroundColor: Colors.APHASIA_ORANGE,
         borderRadius:8,
-        margin: 8,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        flex:1
     },
     textButton:{
         padding: 10,
@@ -386,7 +422,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:30
+        paddingBottom: 15,
     },
     image:{
         width:150,
@@ -395,9 +431,10 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     imageIcon:{
-        width:70,
-        height:70,
         resizeMode: 'contain',
+        width: 140,
+        height: 110,
+        maxWidth: '100%',
     },
     center:{
         flex:1,
@@ -406,6 +443,18 @@ const styles = StyleSheet.create({
     },
     nameCategory:{
         textTransform: 'capitalize',
-        color: Colors.APHASIA_WHITE
+        color: Colors.APHASIA_WHITE,
+        fontSize:18
+    },
+    contentArea:{
+        justifyContent:'center'
+    },
+    total:{
+        backgroundColor: Colors.APHASIA_GREY1,
+        padding: 15,
+        color: Colors.APHASIA_WHITE,
+        textAlign: 'center',
+        borderRadius:8,
+        fontSize: 20
     }
 });

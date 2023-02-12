@@ -4,7 +4,7 @@ import {
     ImageBackground,
     StyleSheet,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from '../constants/Config';
 
 export default class AuthLoadingScreen extends React.Component {

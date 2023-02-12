@@ -119,14 +119,14 @@ export default class WhoIsWhoExerciseScreen extends React.Component {
         {
             (this.state.selected === 'correct') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Muy bien!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Muy bien!</Text>
             </View>
         }
 
         {
             (this.state.selected === 'bad') &&
             <View style={styles.containerImage}>
-                <Text style={{color: this.state.border, fontSize:16, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
+                <Text style={{color: this.state.border, fontSize:20, fontWeight: 'bold'}}>Ups, la elección es incorrecta!</Text>
             </View>
         }
 

@@ -145,7 +145,7 @@ export default class ToSelectExerciseScreen extends React.Component {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
                 <Text style={{fontSize:18, fontWeight: 'bold', textAlign:'center'}}>
-                    Seleecione la imagen correspondiente a la siguiente palabra
+                    Seleccione la imagen correspondiente a la siguiente palabra
                 </Text>
             </View>
         }

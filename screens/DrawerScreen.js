@@ -4,7 +4,7 @@ import Colors from "../constants/Colors";
 import Config from "../constants/Config";
 import {Avatar, Icon} from "react-native-elements";
 import {NavigationActions} from "react-navigation";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EventRegister } from 'react-native-event-listeners'
 import Sound from 'react-native-sound';
 

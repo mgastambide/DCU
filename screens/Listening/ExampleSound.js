@@ -2,8 +2,6 @@ import React from 'react';
 import {Platform, StatusBar, StyleSheet, View, Modal, Text, TouchableOpacity, ImageBackground,
     Animated, Vibration, PermissionsAndroid} from 'react-native';
 import {EventRegister} from "react-native-event-listeners";
-
-import AsyncStorage from "@react-native-community/async-storage";
 import {Icon} from "react-native-elements";
 import Sound from 'react-native-sound';
 

@@ -117,7 +117,7 @@ export default class IsolatedExerciseScreen extends React.Component {
             (this.state.selected === '') &&
             <View style={styles.containerImage}>
                 <Text style={{fontSize:18, fontWeight: 'bold', textAlign:'center'}}>
-                    Seleecione la palabra correspondiente a la siguiente imagen
+                    Seleccione la palabra correspondiente a la siguiente imagen
                 </Text>
             </View>
         }

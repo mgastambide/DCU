@@ -3,7 +3,6 @@ import {
     View, Text,
     StyleSheet, Image,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import Colors from '../constants/Colors';
 import {Icon} from 'react-native-elements';
 

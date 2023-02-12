@@ -13,7 +13,7 @@ import ActivityLoader from "../components/ActivityLoader";
 import ButtonWithLoader from "../components/ButtonWithLoader";
 import HeaderNavigator from '../navigation/HeaderNavigator';
 import {Icon} from "react-native-elements";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class MyProfileScreen extends React.Component {
 

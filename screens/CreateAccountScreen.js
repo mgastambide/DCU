@@ -10,7 +10,7 @@ import {
 
 import WhiteButton from "../components/WhiteButton";
 import Colors from "../constants/Colors";
-import CheckBox from '@react-native-community/checkbox';
+//import CheckBox from '@react-native-community/checkbox';
 
 export default class CreateAccountScreen extends React.Component {
 
@@ -98,24 +98,24 @@ export default class CreateAccountScreen extends React.Component {
                             />
 
                             <TouchableOpacity style={{flexDirection:'row', alignItems: 'center', paddingBottom:10}} onPress={() => this.setState({is_tutor: !this.state.is_tutor, checked:false})}>
-                                <CheckBox
+                                {/* <CheckBox
                                     value={this.state.is_tutor}
                                     onValueChange={() => this.setState({is_tutor: !this.state.is_tutor, checked:false})}
                                     style={{padding:0, margin:0}}
                                     tintColors={{ true: Colors.APHASIA_RED, false: Colors.APHASIA_GREY3 }}
-                                />
+                                /> */}
                                 <Text style={{color:Colors.APHASIA_WHITE, fontSize:16}}>Soy Terapeuta o Tutor</Text>
                             </TouchableOpacity>
 
                             {
                             (!this.state.is_tutor) &&
                             <TouchableOpacity style={{flexDirection:'row', alignItems: 'center', paddingBottom:10}} onPress={() => this.setState({checked: !this.state.checked})}>
-                                <CheckBox
+                                {/* <CheckBox
                                     value={this.state.checked}
                                     onValueChange={() => this.setState({checked: !this.state.checked})}
                                     style={{padding:0, margin:0}}
                                     tintColors={{ true: Colors.APHASIA_RED, false: Colors.APHASIA_GREY3 }}
-                                />
+                                /> */}
                                 <Text style={{color:Colors.APHASIA_WHITE, fontSize:16}}>¿Tiene un terapeuta/tutor?</Text>
                             </TouchableOpacity>
                             }

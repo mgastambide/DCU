@@ -12,7 +12,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import WhiteButton from '../components/WhiteButton';
 import Config from '../constants/Config';
 

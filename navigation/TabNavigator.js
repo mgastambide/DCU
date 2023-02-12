@@ -25,6 +25,7 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
+    tabBarVisible: false,
     tabBarLabel: 'Inicio',
     tabBarIcon: ({ focused }) => {
         return (focused)

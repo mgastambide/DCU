@@ -9,7 +9,7 @@ import {EventRegister} from "react-native-event-listeners";
 import ActivityLoader from "../components/ActivityLoader";
 import ButtonWithLoader from "../components/ButtonWithLoader";
 import HeaderNavigator from '../navigation/HeaderNavigator';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class AchievementsScreen extends React.Component {
 
